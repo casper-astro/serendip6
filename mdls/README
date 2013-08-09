@@ -1,0 +1,3 @@
+dibas_codd_1024_t12_w095_p00.mdl: Original DIBAS 1024-channel design.
+dibas_codd_2048_t12_w095_p00.mdl: Original DIBAS 2048-channel design.
+guppi2_1024_t12_w095_p00_s6.mdl: DIBAS 1024-channel design modified to add PPS sim, for S6 testing.

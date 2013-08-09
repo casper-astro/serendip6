@@ -1,0 +1,93 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+Accumulate	s6_gpu_standalone.cu	/^__global__ void Accumulate(float4 *pf4FFTOut,$/;"	f
+BENCHMARKING	s6_gpu_standalone.h	22;"	d
+BYTE	s6_gpu_standalone.h	/^typedef unsigned char BYTE;$/;"	t
+CUDASafeCallWithCleanUp	s6_gpu_standalone.h	100;"	d
+CleanUp	s6_gpu_standalone.cu	/^void CleanUp()$/;"	f
+CopyDataForFFT	s6_gpu_standalone.cu	/^__global__ void CopyDataForFFT(char4 *pc4Data,$/;"	f
+DEBUG	s6_gpu_standalone.h	20;"	d
+DEF_ACC	s6_gpu_standalone.h	51;"	d
+DEF_LEN_SPEC	s6_gpu_standalone.h	45;"	d
+DEF_NUM_SAMPS	s6_gentestdata.c	29;"	d	file:
+DEF_NUM_SUBBANDS	s6_gpu_standalone.h	53;"	d
+DEF_SIZE_READ	s6_gpu_standalone.h	47;"	d
+DoFFT	s6_gpu_standalone.cu	/^int DoFFT()$/;"	f
+FALSE	s6_gpu_standalone.h	41;"	d
+FFTPLAN_BATCH	s6_gpu_standalone.h	60;"	d
+FFTPLAN_IDIST	s6_gpu_standalone.h	58;"	d
+FFTPLAN_ISTRIDE	s6_gpu_standalone.h	56;"	d
+FFTPLAN_ODIST	s6_gpu_standalone.h	59;"	d
+FFTPLAN_OSTRIDE	s6_gpu_standalone.h	57;"	d
+FFTPLAN_RANK	s6_gpu_standalone.h	55;"	d
+F_S	s6_gentestdata.c	30;"	d	file:
+HandleStopSignals	s6_gpu_standalone.cu	/^void HandleStopSignals(int iSigNo)$/;"	f
+Init	s6_gpu_standalone.cu	/^int Init()$/;"	f
+InitPlot	s6_gpu_standalone.cu	/^int InitPlot()$/;"	f
+LEN_DATA	s6_gpu_standalone.h	49;"	d
+LEN_GENSTRING	s6_gentestdata.c	28;"	d	file:
+LoadDataToMem	s6_gpu_standalone.cu	/^int LoadDataToMem()$/;"	f
+NUM_BYTES_PER_SAMP	s6_gpu_standalone.h	44;"	d
+NUM_SUBBANDS	s6_gentestdata.c	31;"	d	file:
+OUTFILE	s6_gpu_standalone.h	23;"	d
+PG_CI_DEF	s6_gpu_standalone.h	72;"	d
+PG_CI_PLOT	s6_gpu_standalone.h	73;"	d
+PG_DEV	s6_gpu_standalone.h	66;"	d
+PG_SYMBOL	s6_gpu_standalone.h	71;"	d
+PG_VP_MB	s6_gpu_standalone.h	69;"	d
+PG_VP_ML	s6_gpu_standalone.h	67;"	d
+PG_VP_MR	s6_gpu_standalone.h	68;"	d
+PG_VP_MT	s6_gpu_standalone.h	70;"	d
+PLOT	s6_gpu_standalone.h	21;"	d
+Plot	s6_gpu_standalone.cu	/^void Plot(int g_iAccID)$/;"	f
+PrintBenchmarks	s6_gpu_standalone.cu	/^void PrintBenchmarks(float fTotCpInFFT,$/;"	f
+PrintUsage	s6_gentestdata.c	/^void PrintUsage(const char *pcProgName)$/;"	f
+PrintUsage	s6_gpu_standalone.cu	/^void PrintUsage(const char *pcProgName)$/;"	f
+ReadData	s6_gpu_standalone.cu	/^int ReadData()$/;"	f
+RegisterSignalHandlers	s6_gpu_standalone.cu	/^int RegisterSignalHandlers()$/;"	f
+SCALE_FACTOR	s6_gentestdata.c	32;"	d	file:
+TRUE	s6_gpu_standalone.h	42;"	d
+USEC2SEC	s6_gpu_standalone.h	62;"	d
+__CUDASafeCallWithCleanUp	s6_gpu_standalone.cu	/^void __CUDASafeCallWithCleanUp(cudaError_t iRet,$/;"	f
+__VEGAS_GPU_STANDALONE_H__	s6_gpu_standalone.h	10;"	d
+g_acFileData	s6_gpu_standalone.cu	/^char g_acFileData[256] = {0};$/;"	v
+g_cuStart	s6_gpu_standalone.cu	/^cudaEvent_t g_cuStart;$/;"	v
+g_cuStop	s6_gpu_standalone.cu	/^cudaEvent_t g_cuStop;$/;"	v
+g_fFSamp	s6_gpu_standalone.cu	/^float g_fFSamp = 1.0;                   \/* 1 [frequency] *\/$/;"	v
+g_fTimeCpIn	s6_gpu_standalone.cu	/^float g_fTimeCpIn = 0.0;$/;"	v
+g_fTotCpIn	s6_gpu_standalone.cu	/^float g_fTotCpIn = 0.0;$/;"	v
+g_iAccID	s6_gpu_standalone.cu	/^int g_iAccID = 0;$/;"	v
+g_iCountCpIn	s6_gpu_standalone.cu	/^int g_iCountCpIn = 0;$/;"	v
+g_iIsDataReadDone	s6_gpu_standalone.cu	/^int g_iIsDataReadDone = FALSE;$/;"	v
+g_iIsProcDone	s6_gpu_standalone.cu	/^int g_iIsProcDone = FALSE;$/;"	v
+g_iMaxThreadsPerBlock	s6_gpu_standalone.cu	/^int g_iMaxThreadsPerBlock = 0;$/;"	v
+g_iNFFT	s6_gpu_standalone.cu	/^int g_iNFFT = DEF_LEN_SPEC;$/;"	v
+g_iNumChanBlocks	s6_gpu_standalone.cu	/^int g_iNumChanBlocks = 0;$/;"	v
+g_iNumConcFFT	s6_gpu_standalone.cu	/^int g_iNumConcFFT = 4;                  \/* number of channels that are to be FFT'd concurrently *\/$/;"	v
+g_iNumSubBands	s6_gpu_standalone.cu	/^int g_iNumSubBands = DEF_NUM_SUBBANDS;$/;"	v
+g_iReadCount	s6_gpu_standalone.cu	/^int g_iReadCount = 0;$/;"	v
+g_iReadID	s6_gpu_standalone.cu	/^int g_iReadID = 0;$/;"	v
+g_iSizeFile	s6_gpu_standalone.cu	/^int g_iSizeFile = 0;$/;"	v
+g_lReqBytes	s6_gpu_standalone.cu	/^long int g_lReqBytes = 0;$/;"	v
+g_pc4DataRead_d	s6_gpu_standalone.cu	/^char4* g_pc4DataRead_d = NULL;          \/* raw data read pointer *\/$/;"	v
+g_pc4Data_d	s6_gpu_standalone.cu	/^char4* g_pc4Data_d = NULL;              \/* raw data starting address *\/$/;"	v
+g_pc4InBuf	s6_gpu_standalone.cu	/^char4* g_pc4InBuf = NULL;$/;"	v
+g_pc4InBufRead	s6_gpu_standalone.cu	/^char4* g_pc4InBufRead = NULL;$/;"	v
+g_pc4TempBuf	s6_gpu_standalone.cu	/^char4* g_pc4TempBuf = NULL;$/;"	v
+g_pf4FFTIn_d	s6_gpu_standalone.cu	/^float4* g_pf4FFTIn_d = NULL;$/;"	v
+g_pf4FFTOut_d	s6_gpu_standalone.cu	/^float4* g_pf4FFTOut_d = NULL;$/;"	v
+g_pf4Temp	s6_gpu_standalone.cu	/^float4* g_pf4Temp = NULL;$/;"	v
+g_pfFreq	s6_gpu_standalone.cu	/^float* g_pfFreq = NULL;$/;"	v
+g_pfSumPowX	s6_gpu_standalone.cu	/^float* g_pfSumPowX = NULL;$/;"	v
+g_pfSumPowY	s6_gpu_standalone.cu	/^float* g_pfSumPowY = NULL;$/;"	v
+g_pfSumStokesIm	s6_gpu_standalone.cu	/^float* g_pfSumStokesIm = NULL;$/;"	v
+g_pfSumStokesRe	s6_gpu_standalone.cu	/^float* g_pfSumStokesRe = NULL;$/;"	v
+g_ppf4SumStokes	s6_gpu_standalone.cu	/^float4** g_ppf4SumStokes = NULL;$/;"	v
+g_ppf4SumStokes_d	s6_gpu_standalone.cu	/^float4** g_ppf4SumStokes_d = NULL;$/;"	v
+g_stPlan	s6_gpu_standalone.cu	/^cufftHandle g_stPlan = {0};$/;"	v
+main	s6_gentestdata.c	/^int main(int argc, char *argv[])$/;"	f
+main	s6_gpu_standalone.cu	/^int main(int argc, char *argv[])$/;"	f
