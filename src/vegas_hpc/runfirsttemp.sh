@@ -1,1 +1,1 @@
-export VEGAS=/export/home/spec-hpc-01/jayanth/serendip6/vegas_devel/src
+export VEGAS=/export/home/spec-hpc-01/jayanth/git/serendip6/src
