@@ -282,7 +282,6 @@ int main(int argc, char *argv[])
             ++iSpecCount;
         }
 
-        printf("sc = %d, na = %d, ai = %d\n", iSpecCount, iNumAcc, g_iAccID);
         if (iSpecCount == iNumAcc)
         {
             /* dump to buffer */
@@ -296,28 +295,6 @@ int main(int argc, char *argv[])
                                                 * g_iNFFT
                                                 * sizeof(float4)),
                                                cudaMemcpyDeviceToHost));
-            #if 0
-            for (int m = 0; m < g_iNumConcFFT * g_iNFFT; ++m)
-            {
-                printf("%g, %g, %g, %g\n", g_ppf4SumStokes[g_iAccID][m].x,
-                                           g_ppf4SumStokes[g_iAccID][m].y,
-                                           g_ppf4SumStokes[g_iAccID][m].z,
-                                           g_ppf4SumStokes[g_iAccID][m].w);
-            }
-        CUDASafeCallWithCleanUp(cudaMemcpy(g_pf4Temp,
-                                           g_pf4FFTOut_d,
-                                           (g_iNumConcFFT
-                                            * g_iNFFT
-                                            * sizeof(float4)),
-                                           cudaMemcpyDeviceToHost));
-        for (int m = 0; m < g_iNumConcFFT * g_iNFFT; ++m)
-        {
-            printf("%g, %g, %g, %g\n", g_pf4Temp[m].x,
-                                       g_pf4Temp[m].y,
-                                       g_pf4Temp[m].z,
-                                       g_pf4Temp[m].w);
-        }
-            #endif
 #if PLOT
             /* NOTE: Plot() will modify data! */
             Plot(g_iAccID);
@@ -710,27 +687,6 @@ int ReadData()
     g_fTotCpIn += g_fTimeCpIn;
     ++g_iCountCpIn;
 #endif
-#if 0
-    if (1 == g_iReadID)
-    {
-        (void) memset(g_pc4TempBuf, '\0', g_iNumConcFFT * g_iNFFT * sizeof(char4));
-        CUDASafeCallWithCleanUp(cudaMemcpy(g_pc4TempBuf,
-                                           g_pc4Data_d,
-                                           g_iNumConcFFT * sizeof(char4) * g_iNFFT,
-                                           cudaMemcpyDeviceToHost));
-        for (int i = 0; i < g_iNFFT; ++i)
-        {
-            for (int j = 0; j < g_iNumConcFFT; ++j)
-            {
-                int k = (i * g_iNumConcFFT) + j;
-                if (0 == j)
-                {
-                    printf("%d, %d, %d, %d\n", g_pc4TempBuf[k].x, g_pc4TempBuf[k].y, g_pc4TempBuf[k].z, g_pc4TempBuf[k].w);
-                }
-            }
-        }
-    }
-#endif
     /* update the read pointer to where data needs to be read in from, in the
        next read */
     if (g_iNumConcFFT == g_iNumSubBands)
@@ -785,7 +741,6 @@ int DoFFT()
 {
     cufftResult iCUFFTRet = CUFFT_SUCCESS;
 
-#if 1
     /* execute plan */
     iCUFFTRet = cufftExecC2C(g_stPlan,
                              (cufftComplex*) g_pf4FFTIn_d,
@@ -796,14 +751,6 @@ int DoFFT()
         (void) fprintf(stderr, "ERROR! FFT failed!\n");
         return EXIT_FAILURE;
     }
-#else
-    CUDASafeCallWithCleanUp(cudaMemcpy(g_pf4FFTOut_d,
-                                       g_pf4FFTIn_d,
-                                       (g_iNumConcFFT
-                                        * g_iNFFT
-                                        * sizeof(float4)),
-                                       cudaMemcpyDeviceToDevice));
-#endif
 
     return EXIT_SUCCESS;
 }
