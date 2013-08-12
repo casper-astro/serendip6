@@ -355,13 +355,13 @@ N	sla.c	/^                         INTEGER(N),$/;"	v
 NEW_GBT	vegas_defines.h	12;"	d
 NUM_STOKES	vegas_accum_thread.c	35;"	d	file:
 NUM_SW_STATES	vegas_accum_thread.c	32;"	d	file:
-PACKET_SIZE_1SFA	vegas_udp.c	200;"	d	file:
-PACKET_SIZE_1SFA_OLD	vegas_udp.c	201;"	d	file:
-PACKET_SIZE_FAST4K	vegas_udp.c	202;"	d	file:
-PACKET_SIZE_ORIG	vegas_udp.c	198;"	d	file:
-PACKET_SIZE_PASP	vegas_udp.c	203;"	d	file:
-PACKET_SIZE_SHORT	vegas_udp.c	199;"	d	file:
-PACKET_SIZE_SPEAD	vegas_udp.c	204;"	d	file:
+PACKET_SIZE_1SFA	vegas_udp.c	216;"	d	file:
+PACKET_SIZE_1SFA_OLD	vegas_udp.c	217;"	d	file:
+PACKET_SIZE_FAST4K	vegas_udp.c	218;"	d	file:
+PACKET_SIZE_ORIG	vegas_udp.c	214;"	d	file:
+PACKET_SIZE_PASP	vegas_udp.c	219;"	d	file:
+PACKET_SIZE_SHORT	vegas_udp.c	215;"	d	file:
+PACKET_SIZE_SPEAD	vegas_udp.c	220;"	d	file:
 PAYLOAD_SIZE	vegas_defines.h	30;"	d
 PHI	sla.c	/^                            DOUBLE(PHI),$/;"	v
 POINTER	f77.h	239;"	d

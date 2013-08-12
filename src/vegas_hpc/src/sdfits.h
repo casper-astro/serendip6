@@ -63,7 +63,7 @@ struct sdfits_data_columns
     int stpspec;            // SPECTRUM_COUNT of the last spectrum in the integration
 
     float centre_freq_idx;  // Index of centre frequency bin
-    double centre_freq[8];  // Frequency at centre of each sub-band
+    double centre_freq[128];  // Frequency at centre of each sub-band
     double ra;              // RA mid-integration
     double dec;             // DEC mid-integration
 

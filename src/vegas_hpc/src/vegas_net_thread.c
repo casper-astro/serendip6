@@ -314,11 +314,11 @@ void *vegas_net_thread(void *_args) {
     heaps_per_block =   (block_size - MAX_HEAPS_PER_BLK*spead_hdr_size) /
                         (heap_size - spead_hdr_size);
     /* make general --> */
-    printf("***************%d\n", pf.hdr.nsubband);
     int nsubband = pf.hdr.nsubband;
     int iDataSize = heaps_per_block * (heap_size - spead_hdr_size);
     int iWholeSpectra = iDataSize / (nsubband * nchan * 4); /* 4 is the number of bytes in a sample */
     heaps_per_block = (iWholeSpectra * (nsubband * nchan * 4)) / (heap_size - spead_hdr_size);
+    printf("***************%d\n", heaps_per_block);
     if (heaps_per_block > MAX_HEAPS_PER_BLK)   /* sanity check, shouldn't happen */
     {
         vegas_error("vegas_net_thread", "heaps_per_block > MAX_HEAPS_PER_BLK");
