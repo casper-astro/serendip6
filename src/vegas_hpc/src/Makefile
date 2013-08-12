@@ -40,7 +40,7 @@ CUDA_OBJS = pfb_gpu.o pfb_gpu_kernels.o vegas_pfb_thread.o
 
 all: $(PROGS) $(THREAD_PROGS) vegas_hpc_lbw vegas_hpc_server
 clean:
-	rm -f $(PROGS) $(THREAD_PROGS) *~ *.o sdfits.tgz test_psrfits_0*.fits *.ptx
+	rm -f $(PROGS) $(THREAD_PROGS) *~ *.o sdfits.tgz test_psrfits_0*.fits *.ptx vegas_hpc_lbw vegas_hpc_server
 INSTALL_DIR = ../bin
 install: $(PROGS) $(THREAD_PROGS) vegas_hpc_lbw
 	mkdir -p $(INSTALL_DIR) && \
