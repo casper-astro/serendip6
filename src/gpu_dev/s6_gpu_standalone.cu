@@ -35,9 +35,6 @@ int g_iNumChanBlocks = 0;
 int g_iAccID = 0;
 int g_iReadID = 0;
 
-float4* g_pf4Temp = NULL;
-char4* g_pc4TempBuf = NULL;
-
 #if PLOT
 float* g_pfSumPowX = NULL;
 float* g_pfSumPowY = NULL;
@@ -580,24 +577,6 @@ int Init()
     }
 #endif
 
-    g_pc4TempBuf = (char4*) malloc(g_iNumConcFFT * g_iNFFT * sizeof(char4));
-    if (NULL == g_pc4TempBuf)
-    {
-        (void) fprintf(stderr,
-                       "ERROR: Memory allocation failed! %s.\n",
-                       strerror(errno));
-        return EXIT_FAILURE;
-    }
-
-    g_pf4Temp = (float4*) malloc(g_iNumConcFFT * g_iNFFT * sizeof(float4));
-    if (NULL == g_pf4Temp)
-    {
-        (void) fprintf(stderr,
-                       "ERROR: Memory allocation failed! %s.\n",
-                       strerror(errno));
-        return EXIT_FAILURE;
-    }
-
     return EXIT_SUCCESS;
 }
 
@@ -699,7 +678,6 @@ int ReadData()
         {
             g_pc4InBufRead += (g_iNumConcFFT % g_iNumSubBands);
             g_pc4InBufRead += (g_iNumSubBands * (g_iNFFT - 1));
-            //g_pc4InBufRead -= (g_iNumSubBands - g_iNumConcFFT);
         }
         else
         {
@@ -862,17 +840,6 @@ void CleanUp()
     }
     cpgclos();
 #endif
-
-    if (g_pc4TempBuf != NULL)
-    {
-        free(g_pc4TempBuf);
-        g_pc4TempBuf = NULL;
-    }
-    if (g_pf4Temp != NULL)
-    {
-        free(g_pf4Temp);
-        g_pf4Temp = NULL;
-    }
 
     return;
 }

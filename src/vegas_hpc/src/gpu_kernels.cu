@@ -1,11 +1,11 @@
 /*
- * pfb_gpu_kernels.cu 
+ * gpu_kernels.cu 
  */
 
 #include "vegas_defines.h"
 #include "vegas_databuf.h"
 #include "spead_heap.h"
-#include "pfb_gpu.h"
+#include "gpu_proc.h"
 
 
 __global__ void CopyDataForFFT(char4 *pc4Data,

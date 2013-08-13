@@ -1,6 +1,7 @@
-/* vegas_pfb_thread.c
+/* vegas_gpu_thread.c
  *
- * Performs PFB on incoming time samples
+ * Performs fine channelization and other signal processing on incoming time
+ *  samples
  */
 
 #define _GNU_SOURCE 1
@@ -20,7 +21,7 @@
 #include "vegas_status.h"
 #include "vegas_databuf.h"
 #include "vegas_params.h"
-#include "pfb_gpu.h"
+#include "gpu_proc.h"
 
 #define STATUS_KEY "GPUSTAT"
 #include "vegas_threads.h"
@@ -33,7 +34,7 @@ extern void vegas_read_obs_params(char *buf,
                                      struct vegas_params *g,
                                      struct sdfits *p);
 
-void vegas_pfb_thread(void *_args) {
+void vegas_gpu_thread(void *_args) {
 
     /* Get args */
     struct vegas_thread_args *args = (struct vegas_thread_args *)_args;
@@ -46,14 +47,14 @@ void vegas_pfb_thread(void *_args) {
     CPU_SET(12, &cpuset);
     rv = sched_setaffinity(0, sizeof(cpu_set_t), &cpuset);
     if (rv<0) { 
-        vegas_error("vegas_pfb_thread", "Error setting cpu affinity.");
+        vegas_error("vegas_gpu_thread", "Error setting cpu affinity.");
         perror("sched_setaffinity");
     }
 
     /* Set priority */
     rv = setpriority(PRIO_PROCESS, 0, args->priority);
     if (rv<0) {
-        vegas_error("vegas_pfb_thread", "Error setting priority level.");
+        vegas_error("vegas_gpu_thread", "Error setting priority level.");
         perror("set_priority");
     }
 
@@ -61,7 +62,7 @@ void vegas_pfb_thread(void *_args) {
     struct vegas_status st;
     rv = vegas_status_attach(&st);
     if (rv!=VEGAS_OK) {
-        vegas_error("vegas_pfb_thread", 
+        vegas_error("vegas_gpu_thread", 
                 "Error attaching to status shared memory.");
         pthread_exit(NULL);
     }
@@ -86,7 +87,7 @@ void vegas_pfb_thread(void *_args) {
         char msg[256];
         sprintf(msg, "Error attaching to databuf(%d) shared memory.",
                 args->input_buffer);
-        vegas_error("vegas_pfb_thread", msg);
+        vegas_error("vegas_gpu_thread", msg);
         pthread_exit(NULL);
     }
     pthread_cleanup_push((void *)vegas_databuf_detach, db_in);
@@ -95,7 +96,7 @@ void vegas_pfb_thread(void *_args) {
         char msg[256];
         sprintf(msg, "Error attaching to databuf(%d) shared memory.",
                 args->output_buffer);
-        vegas_error("vegas_pfb_thread", msg);
+        vegas_error("vegas_gpu_thread", msg);
         pthread_exit(NULL);
     }
     pthread_cleanup_push((void *)vegas_databuf_detach, db_out);
@@ -155,8 +156,8 @@ void vegas_pfb_thread(void *_args) {
         }
         vegas_read_subint_params(hdr_in, &gp, &sf);
 
-        /* Call PFB function */
-        do_pfb(db_in, curblock_in, db_out, first, st, acc_len);
+        /* Call signal processing function */
+        do_proc(db_in, curblock_in, db_out, first, st, acc_len);
 
         /* Mark input block as free */
         vegas_databuf_set_free(db_in, curblock_in);

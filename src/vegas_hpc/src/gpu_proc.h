@@ -1,5 +1,5 @@
-#ifndef _PFB_GPU_H
-#define _PFB_GPU_H
+#ifndef _GPU_PROC_H
+#define _GPU_PROC_H
 
 #include "vegas_databuf.h"
 
@@ -21,12 +21,12 @@ int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, in
 #if defined __cplusplus
 extern "C"
 #endif
-void do_pfb(struct vegas_databuf *db_in,
-            int curblock_in,
-            struct vegas_databuf *db_out,
-            int first,
-            struct vegas_status st,
-            int acc_len);
+void do_proc(struct vegas_databuf *db_in,
+             int curblock_in,
+             struct vegas_databuf *db_out,
+             int first,
+             struct vegas_status st,
+             int acc_len);
 
 int do_fft();
 

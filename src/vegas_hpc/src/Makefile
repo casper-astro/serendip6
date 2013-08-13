@@ -36,7 +36,7 @@ THREAD_PROGS = test_net_thread vegas_hpc_hbw
 THREAD_OBJS  = vegas_net_thread.o vegas_rawdisk_thread.o \
 	        vegas_sdfits_thread.o vegas_accum_thread.o \
 	        vegas_null_thread.o vegas_fake_net_thread.o
-CUDA_OBJS = pfb_gpu.o pfb_gpu_kernels.o vegas_pfb_thread.o
+CUDA_OBJS = gpu_proc.o gpu_kernels.o vegas_gpu_thread.o
 
 all: $(PROGS) $(THREAD_PROGS) vegas_hpc_lbw vegas_hpc_server
 clean:

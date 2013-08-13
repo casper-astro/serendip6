@@ -20,8 +20,8 @@ extern "C" {
 }
 #endif
 #include "vegas_defines.h"
-#include "pfb_gpu.h"
-#include "pfb_gpu_kernels.h"
+#include "gpu_proc.h"
+#include "gpu_kernels.h"
 #include "spead_heap.h"
 
 #define STATUS_KEY "GPUSTAT"
@@ -74,10 +74,10 @@ void __CUDASafeCall(cudaError_t iCUDARet,
                                const int iLine,
                                void (*pCleanUp)(void));
 
-#define CUDASafeCall(iRet)   __CUDASafeCall(iRet,       \
-                                                                  __FILE__,   \
-                                                                  __LINE__,   \
-                                                                  &cleanup_gpu)
+#define CUDASafeCall(iRet)   __CUDASafeCall(iRet,                             \
+                                            __FILE__,                         \
+                                            __LINE__,                         \
+                                            &cleanup_gpu)
 
 /* Initialize all necessary memory, etc for doing PFB 
  * at the given params.
@@ -208,12 +208,12 @@ int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, in
 
 /* Actually do the PFB by calling CUDA kernels */
 extern "C"
-void do_pfb(struct vegas_databuf *db_in,
-            int curblock_in,
-            struct vegas_databuf *db_out,
-            int first,
-            struct vegas_status st,
-            int acc_len)
+void do_proc(struct vegas_databuf *db_in,
+             int curblock_in,
+             struct vegas_databuf *db_out,
+             int first,
+             struct vegas_status st,
+             int acc_len)
 {
     /* Declare local variables */
     char *hdr_out = NULL;
@@ -274,22 +274,20 @@ void do_pfb(struct vegas_databuf *db_in,
     if (first)
     {
         /* Sanity check for the first iteration */
-        if ((g_iBlockInDataSize % (g_iNumSubBands * g_nchan * sizeof(char4))) != 0)
+        if ((g_iBlockInDataSize % (g_iNumConcFFT * g_nchan * sizeof(char4))) != 0)
         {
             (void) fprintf(stderr, "ERROR: Data size mismatch!\n");
             run = 0;
             return;
         }
-        CUDASafeCall(cudaMemcpy(g_pc4Data_d,
-                                payload_addr_in,
-                                g_iBlockInDataSize,
-                                cudaMemcpyHostToDevice));
-        /* duplicate the last (VEGAS_NUM_TAPS - 1) segments at the end for
-           the next iteration */
-        CUDASafeCall(cudaMemcpy(g_pc4Data_d + (g_iBlockInDataSize / sizeof(char4)),
-                                g_pc4Data_d + (g_iBlockInDataSize / sizeof(char4)) - ((VEGAS_NUM_TAPS - 1) * g_iNumSubBands * g_nchan),
-                                ((VEGAS_NUM_TAPS - 1) * g_iNumSubBands * g_nchan * sizeof(char4)),
-                                cudaMemcpyDeviceToDevice));
+        CUDASafeCall(cudaMemcpy2D(g_pc4Data_d,
+                                  g_iNumConcFFT * sizeof(char4),     /* dest. pitch */
+                                  payload_addr_in,
+                                  g_iNumSubBands * sizeof(char4),    /* src. pitch */
+                                  g_iNumConcFFT * sizeof(char4),
+                                  g_nchan,
+                                  //g_iBlockInDataSize,
+                                  cudaMemcpyHostToDevice));
 
         /* copy the status bits and valid flags for all heaps to arrays separate
            from the index, so that it can be combined with the corresponding
@@ -301,21 +299,18 @@ void do_pfb(struct vegas_databuf *db_in,
             g_auiHeapValid[i] = index_in->cpu_gpu_buf[i].heap_valid;
             ++time_heap;
         }
-        /* duplicate the last (VEGAS_NUM_TAPS - 1) segments at the end for the
-           next iteration */
-        for ( ; i < index_in->num_heaps + num_in_heaps_tail; ++i)
-        {
-            g_auiStatusBits[i] = g_auiStatusBits[i-num_in_heaps_tail];
-            g_auiHeapValid[i] = g_auiHeapValid[i-num_in_heaps_tail];
-        }
     }
     else
     {
-        /* If this is not the first run, need to handle block boundary, while doing the PFB */
-        CUDASafeCall(cudaMemcpy(g_pc4Data_d,
-                                g_pc4Data_d + (g_iBlockInDataSize / sizeof(char4)),
-                                ((VEGAS_NUM_TAPS - 1) * g_iNumSubBands * g_nchan * sizeof(char4)),
-                                cudaMemcpyDeviceToDevice));
+        CUDASafeCall(cudaMemcpy2D(g_pc4Data_d,
+                                  g_iNumConcFFT * sizeof(char4),     /* dest. pitch */
+                                  payload_addr_in,
+                                  g_iNumSubBands * sizeof(char4),    /* src. pitch */
+                                  g_iNumConcFFT * sizeof(char4),
+                                  g_nchan,
+                                  //g_iBlockInDataSize,
+                                  cudaMemcpyHostToDevice));
+////??????
         CUDASafeCall(cudaMemcpy(g_pc4Data_d + ((VEGAS_NUM_TAPS - 1) * g_iNumSubBands * g_nchan),
                                 payload_addr_in,
                                 g_iBlockInDataSize,
