@@ -6,18 +6,12 @@
 #define FALSE               0
 #define TRUE                1
 
-#define VEGAS_NUM_TAPS      8
-
-#define FILE_COEFF_PREFIX   "coeff"
-#define FILE_COEFF_DATATYPE "float"
-#define FILE_COEFF_SUFFIX   ".dat"
-
 #define FFTPLAN_RANK        1
-#define FFTPLAN_ISTRIDE     (2 * g_iNumSubBands)
-#define FFTPLAN_OSTRIDE     (2 * g_iNumSubBands)
+#define FFTPLAN_ISTRIDE     (2 * g_iNumConcFFT)
+#define FFTPLAN_OSTRIDE     (2 * g_iNumConcFFT)
 #define FFTPLAN_IDIST       1
 #define FFTPLAN_ODIST       1
-#define FFTPLAN_BATCH       (2 * g_iNumSubBands)
+#define FFTPLAN_BATCH       (2 * g_iNumConcFFT)
 
 #if defined __cplusplus
 extern "C"

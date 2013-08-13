@@ -44,16 +44,13 @@ char4* g_pc4InBuf = NULL;
 char4* g_pc4InBufRead = NULL;
 char4* g_pc4Data_d = NULL;              /* raw data starting address */
 char4* g_pc4DataRead_d = NULL;          /* raw data read pointer */
-dim3 g_dimBPFB(1, 1, 1);
-dim3 g_dimGPFB(1, 1);
+dim3 g_dimBCopy(1, 1, 1);
+dim3 g_dimGCopy(1, 1);
 dim3 g_dimBAccum(1, 1, 1);
 dim3 g_dimGAccum(1, 1);
-float4* g_pf4SumStokes_d = NULL;
+float4** g_ppf4SumStokes = NULL;
+float4** g_ppf4SumStokes_d = NULL;
 int g_iNumSubBands = 0;
-int g_iFileCoeff = 0;
-char g_acFileCoeff[256] = {0};
-float *g_pfPFBCoeff = NULL;
-float *g_pfPFBCoeff_d = NULL;
 unsigned int g_iPrevBlankingState = FALSE;
 int g_iTotHeapOut = 0;
 int g_iMaxNumHeapOut = 0;
@@ -67,6 +64,10 @@ unsigned int g_auiHeapValid[2*MAX_HEAPS_PER_BLK] = {0};
 int g_iFirstHeapIn = 0;
 double g_dFirstHeapRcvdMJD = 0.0;
 int g_iSpecPerAcc = 0;
+int g_iNumConcFFT = 4;
+int g_iNumChanBlocks = 0;
+int g_iAccID = 0;
+int g_iReadID = 0;
 
 void __CUDASafeCall(cudaError_t iCUDARet,
                                const char* pcFile,
@@ -112,63 +113,7 @@ int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, in
     CUDASafeCall(cudaGetDeviceProperties(&stDevProp, 0));
     iMaxThreadsPerBlock = stDevProp.maxThreadsPerBlock;
 
-    g_pfPFBCoeff = (float *) malloc(g_iNumSubBands
-                                          * VEGAS_NUM_TAPS
-                                          * g_nchan
-                                          * sizeof(float));
-    if (NULL == g_pfPFBCoeff)
-    {
-        (void) fprintf(stderr,
-                       "ERROR: Memory allocation failed! %s.\n",
-                       strerror(errno));
-        return EXIT_FAILURE;
-    }
-
-    /* allocate memory for the filter coefficient array on the device */
-    CUDASafeCall(cudaMalloc((void **) &g_pfPFBCoeff_d,
-                                       g_iNumSubBands
-                                       * VEGAS_NUM_TAPS
-                                       * g_nchan
-                                       * sizeof(float)));
-
-    /* read filter coefficients */
-    /* build file name */
-    (void) sprintf(g_acFileCoeff,
-                   "%s_%s_%d_%d_%d%s",
-                   FILE_COEFF_PREFIX,
-                   FILE_COEFF_DATATYPE,
-                   VEGAS_NUM_TAPS,
-                   g_nchan,
-                   g_iNumSubBands,
-                   FILE_COEFF_SUFFIX);
-    g_iFileCoeff = open(g_acFileCoeff, O_RDONLY);
-    if (g_iFileCoeff < EXIT_SUCCESS)
-    {
-        (void) fprintf(stderr,
-                       "ERROR: Opening filter coefficients file %s "
-                       "failed! %s.\n",
-                       g_acFileCoeff,
-                       strerror(errno));
-        return EXIT_FAILURE;
-    }
-
-    iRet = read(g_iFileCoeff,
-                g_pfPFBCoeff,
-                g_iNumSubBands * VEGAS_NUM_TAPS * g_nchan * sizeof(float));
-    if (iRet != (g_iNumSubBands * VEGAS_NUM_TAPS * g_nchan * sizeof(float)))
-    {
-        (void) fprintf(stderr,
-                       "ERROR: Reading filter coefficients failed! %s.\n",
-                       strerror(errno));
-        return EXIT_FAILURE;
-    }
-    (void) close(g_iFileCoeff);
-
-    /* copy filter coefficients to the device */
-    CUDASafeCall(cudaMemcpy(g_pfPFBCoeff_d,
-               g_pfPFBCoeff,
-               g_iNumSubBands * VEGAS_NUM_TAPS * g_nchan * sizeof(float),
-               cudaMemcpyHostToDevice));
+    g_iNumChanBlocks = g_iNumSubBands / g_iNumConcFFT;
 
     /* allocate memory for data array - 32MB is the block size for the VEGAS
        input buffer, allocate 32MB + space for (VEGAS_NUM_TAPS - 1) blocks of
@@ -186,20 +131,58 @@ int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, in
 
     /* calculate kernel parameters */
     /* ASSUMPTION: g_nchan >= iMaxThreadsPerBlock */
-    g_dimBPFB.x = iMaxThreadsPerBlock;
+    g_dimBCopy.x = g_iMaxThreadsPerBlock;
     g_dimBAccum.x = iMaxThreadsPerBlock;
-    g_dimGPFB.x = (g_iNumSubBands * g_nchan) / iMaxThreadsPerBlock;
-    g_dimGAccum.x = (g_iNumSubBands * g_nchan) / iMaxThreadsPerBlock;
+    g_dimGCopy.x = (g_iNumConcFFT * g_nchan) / g_iMaxThreadsPerBlock;
+    g_dimGAccum.x = (g_iNumConcFFT * g_nchan) / iMaxThreadsPerBlock;
 
     CUDASafeCall(cudaMalloc((void **) &g_pf4FFTIn_d,
-                                 g_iNumSubBands * g_nchan * sizeof(float4)));
+                                 g_iNumConcFFT * g_nchan * sizeof(float4)));
     CUDASafeCall(cudaMalloc((void **) &g_pf4FFTOut_d,
-                                 g_iNumSubBands * g_nchan * sizeof(float4)));
-    CUDASafeCall(cudaMalloc((void **) &g_pf4SumStokes_d,
-                                 g_iNumSubBands * g_nchan * sizeof(float4)));
-    CUDASafeCall(cudaMemset(g_pf4SumStokes_d,
-                                 '\0',
-                                 g_iNumSubBands * g_nchan * sizeof(float4)));
+                                 g_iNumConcFFT * g_nchan * sizeof(float4)));
+
+    g_ppf4SumStokes = (float4 **) malloc(g_iNumChanBlocks * sizeof(float4 **));
+    if (NULL == g_ppf4SumStokes)
+    {
+        (void) fprintf(stderr,
+                       "ERROR: Memory allocation failed! %s.\n",
+                       strerror(errno));
+        return EXIT_FAILURE;
+    }
+    for (i = 0; i < g_iNumChanBlocks; ++i)
+    {
+        g_ppf4SumStokes[i] = (float4 *) malloc(g_iNumConcFFT
+                                               * g_nchan
+                                               * sizeof(float4));
+        if (NULL == g_ppf4SumStokes[i])
+        {
+            (void) fprintf(stderr,
+                           "ERROR: Memory allocation failed! %s.\n",
+                           strerror(errno));
+            return EXIT_FAILURE;
+        }
+    }
+
+    g_ppf4SumStokes_d = (float4 **) malloc(g_iNumChanBlocks * sizeof(float4 **));
+    if (NULL == g_ppf4SumStokes_d)
+    {
+        (void) fprintf(stderr,
+                       "ERROR: Memory allocation failed! %s.\n",
+                       strerror(errno));
+        return EXIT_FAILURE;
+    }
+    for (i = 0; i < g_iNumChanBlocks; ++i)
+    {
+        CUDASafeCallWithCleanUp(cudaMalloc((void **) &g_ppf4SumStokes_d[i],
+                                           g_iNumConcFFT
+                                           * g_nchan
+                                           * sizeof(float4)));
+        CUDASafeCallWithCleanUp(cudaMemset(g_ppf4SumStokes_d[i],
+                                           '\0',
+                                           g_iNumConcFFT
+                                           * g_nchan
+                                           * sizeof(float4)));
+    }
 
     /* create plan */
     iCUFFTRet = cufftPlanMany(&g_stPlan,
@@ -389,10 +372,8 @@ void do_pfb(struct vegas_databuf *db_in,
             }
         }
 
-        /* Perform polyphase filtering */
-        DoPFB<<<g_dimGPFB, g_dimBPFB>>>(g_pc4DataRead_d,
-                                        g_pf4FFTIn_d,
-                                        g_pfPFBCoeff_d);
+        CopyDataForFFT<<<g_dimGCopy, g_dimBCopy>>>(g_pc4DataRead_d,
+                                                   g_pf4FFTIn_d);
         CUDASafeCall(cudaThreadSynchronize());
         iCUDARet = cudaGetLastError();
         if (iCUDARet != cudaSuccess)
