@@ -21,7 +21,6 @@ __global__ void CopyDataForFFT(char4 *pc4Data,
     return;
 }
 
-
 __global__ void Accumulate(float4 *pf4FFTOut,
                            float4 *pf4SumStokes)
 {

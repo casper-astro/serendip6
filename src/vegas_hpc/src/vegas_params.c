@@ -576,7 +576,7 @@ void vegas_read_obs_params(char *buf,
         // Free the old arrays in case we've changed the params
         vegas_free_sdfits(sf);
     }
-
+    
     // Read information that is appropriate for the subints
     vegas_read_subint_params(buf, g, sf);
 }

@@ -1200,7 +1200,6 @@ const char *keyword;    /* character string containing the name of the variable
 }
 
 
-#include <execinfo.h>
 /* Find FITS header line containing specified keyword */
 
 char *
@@ -1239,11 +1238,6 @@ const char *keyword;    /* character string containing the name of the variable
         lmax = lhead0;
     else
         lmax = 256000;
-    //jayanth
-    //if (NULL == hstring)
-    //{
-    //    return NULL;
-    //}
     for (lhead = 0; lhead < lmax; lhead++) {
         if (hstring[lhead] == (char) 0)
             break;

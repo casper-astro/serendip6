@@ -19,7 +19,7 @@ ifdef EXT_DISK
 	OPT_FLAGS += -DEXT_DISK
 endif
 
-CFLAGS = -g -Wall -rdynamic -D_GNU_SOURCE -I$(CUDA)/include -I$(VEGAS_INCL) \
+CFLAGS = -g -Wall -D_GNU_SOURCE -I$(CUDA)/include -I$(VEGAS_INCL) \
 		-I$(PYSLALIB) -I$(VEGAS_DIR)/src -I/opt/local/include $(OPT_FLAGS)
 
 NVCCFLAGS = -arch=sm_20 -I$(CUDA)/include -I/opt/local/include -I$(VEGAS_INCL)

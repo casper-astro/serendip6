@@ -88,7 +88,7 @@ int vegas_udp_init(struct vegas_udp_params *p) {
     /* Poll command */
     p->pfd.fd = p->sock;
     p->pfd.events = POLLIN;
-
+    
     return(VEGAS_OK);
 }
 
@@ -143,27 +143,9 @@ int vegas_udp_recv(struct vegas_udp_params *p, struct vegas_udp_packet *b, char 
 	    {
     	    if (!bw)    /* only for lbw */
 	        {
-                #if 0
-	            memcpy(b->data,sphead,72); // copy the header template
-	            unsigned int *hdr = (unsigned int *) b->data;
-                unsigned long tmcounter = ((unsigned long) (ntohl(((unsigned int*) tempbuf)[0])) << 32) + ntohl(((unsigned int*) tempbuf)[1]);
-				unsigned long pktnum = (tmcounter - 10) / 2048;
-                unsigned long status_bits = (unsigned long) (tempbuf[1] & 0x0F);
-                hdr[1*2+0] = hdr[1*2+0] | htonl((unsigned int) ((pktnum >> 32) & 0x00000000000000FF));
-	            hdr[1*2+1] = htonl((unsigned int) (pktnum & 0x00000000FFFFFFFF));
-	            hdr[5*2+1] = htonl((tmcounter - 10) & 0x000000FFFFFFFFFF);
-                hdr[7*2+1] = htonl((unsigned int) (status_bits & 0x0000000F));
-	            b->packet_size = 8192+72;
-
-	            char *in = tempbuf+16;          /* skip 16-byte header */
-	            char *out = b->data + 72;       /* skip 72-byte header */
-                (void) memcpy(out, in, 8192);   /* copy data */
-                #endif
-
 	            memcpy(b->data,sphead,72); // copy the header template
 	            unsigned int *hdr = (unsigned int *) b->data;
                 unsigned long pktnum = ((unsigned long) (ntohl(((unsigned int*) tempbuf)[0])) << 32) + ntohl(((unsigned int*) tempbuf)[1]);
-                //printf("%ld\n", pktnum);
 				unsigned long tmcounter = pktnum * 2048;
                 hdr[1*2+0] = hdr[1*2+0] | htonl((unsigned int) ((pktnum >> 32) & 0x00000000000000FF));
 	            hdr[1*2+1] = htonl((unsigned int) (pktnum & 0x00000000FFFFFFFF));
