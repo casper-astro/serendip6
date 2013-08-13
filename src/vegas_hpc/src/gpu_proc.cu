@@ -88,7 +88,6 @@ int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, in
     int iDevCount = 0;
     cudaDeviceProp stDevProp = {0};
     cufftResult iCUFFTRet = CUFFT_SUCCESS;
-    int iRet = EXIT_SUCCESS;
     int iMaxThreadsPerBlock = 0;
 
     g_buf_in_block_size = input_block_sz;
@@ -122,18 +121,14 @@ int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, in
        (num_heaps * heap_size), but since we don't know that value until data
        starts flowing, allocate the maximum possible size */
     CUDASafeCall(cudaMalloc((void **) &g_pc4Data_d,
-                                       (g_buf_in_block_size
-                                        + ((VEGAS_NUM_TAPS - 1)
-                                           * g_iNumSubBands
-                                           * g_nchan
-                                           * sizeof(char4)))));
+                                       (g_buf_in_block_size)));
     g_pc4DataRead_d = g_pc4Data_d;
 
     /* calculate kernel parameters */
     /* ASSUMPTION: g_nchan >= iMaxThreadsPerBlock */
-    g_dimBCopy.x = g_iMaxThreadsPerBlock;
+    g_dimBCopy.x = iMaxThreadsPerBlock;
     g_dimBAccum.x = iMaxThreadsPerBlock;
-    g_dimGCopy.x = (g_iNumConcFFT * g_nchan) / g_iMaxThreadsPerBlock;
+    g_dimGCopy.x = (g_iNumConcFFT * g_nchan) / iMaxThreadsPerBlock;
     g_dimGAccum.x = (g_iNumConcFFT * g_nchan) / iMaxThreadsPerBlock;
 
     CUDASafeCall(cudaMalloc((void **) &g_pf4FFTIn_d,
@@ -147,9 +142,10 @@ int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, in
         (void) fprintf(stderr,
                        "ERROR: Memory allocation failed! %s.\n",
                        strerror(errno));
+        run = 0;
         return EXIT_FAILURE;
     }
-    for (i = 0; i < g_iNumChanBlocks; ++i)
+    for (int i = 0; i < g_iNumChanBlocks; ++i)
     {
         g_ppf4SumStokes[i] = (float4 *) malloc(g_iNumConcFFT
                                                * g_nchan
@@ -159,6 +155,7 @@ int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, in
             (void) fprintf(stderr,
                            "ERROR: Memory allocation failed! %s.\n",
                            strerror(errno));
+            run = 0;
             return EXIT_FAILURE;
         }
     }
@@ -169,19 +166,20 @@ int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, in
         (void) fprintf(stderr,
                        "ERROR: Memory allocation failed! %s.\n",
                        strerror(errno));
+        run = 0;
         return EXIT_FAILURE;
     }
-    for (i = 0; i < g_iNumChanBlocks; ++i)
+    for (int i = 0; i < g_iNumChanBlocks; ++i)
     {
-        CUDASafeCallWithCleanUp(cudaMalloc((void **) &g_ppf4SumStokes_d[i],
-                                           g_iNumConcFFT
-                                           * g_nchan
-                                           * sizeof(float4)));
-        CUDASafeCallWithCleanUp(cudaMemset(g_ppf4SumStokes_d[i],
-                                           '\0',
-                                           g_iNumConcFFT
-                                           * g_nchan
-                                           * sizeof(float4)));
+        CUDASafeCall(cudaMalloc((void **) &g_ppf4SumStokes_d[i],
+                                g_iNumConcFFT
+                                * g_nchan
+                                * sizeof(float4)));
+        CUDASafeCall(cudaMemset(g_ppf4SumStokes_d[i],
+                                '\0',
+                                g_iNumConcFFT
+                                * g_nchan
+                                * sizeof(float4)));
     }
 
     /* create plan */
@@ -241,7 +239,10 @@ void do_proc(struct vegas_databuf *db_in,
     num_in_heaps_per_proc = (g_iNumSubBands * g_nchan * sizeof(char4)) / (index_in->heap_size - sizeof(struct time_spead_heap));
     g_iBlockInDataSize = (index_in->num_heaps * index_in->heap_size) - (index_in->num_heaps * sizeof(struct time_spead_heap));
 
-    num_in_heaps_tail = (((VEGAS_NUM_TAPS - 1) * g_iNumSubBands * g_nchan * sizeof(char4))
+    /////////???????????
+    //num_in_heaps_tail = (((VEGAS_NUM_TAPS - 1) * g_iNumSubBands * g_nchan * sizeof(char4))
+    //                     / (index_in->heap_size - sizeof(struct time_spead_heap)));
+    num_in_heaps_tail = ((g_iNumConcFFT * g_nchan * sizeof(char4))
                          / (index_in->heap_size - sizeof(struct time_spead_heap)));
     num_in_heaps_gpu_buffer = index_in->num_heaps + num_in_heaps_tail;
 
@@ -310,11 +311,11 @@ void do_proc(struct vegas_databuf *db_in,
                                   g_nchan,
                                   //g_iBlockInDataSize,
                                   cudaMemcpyHostToDevice));
-////??????
-        CUDASafeCall(cudaMemcpy(g_pc4Data_d + ((VEGAS_NUM_TAPS - 1) * g_iNumSubBands * g_nchan),
-                                payload_addr_in,
-                                g_iBlockInDataSize,
-                                cudaMemcpyHostToDevice));
+////??????^^^^^
+       // CUDASafeCall(cudaMemcpy(g_pc4Data_d + ((VEGAS_NUM_TAPS - 1) * g_iNumSubBands * g_nchan),
+       //                         payload_addr_in,
+       //                         g_iBlockInDataSize,
+       //                         cudaMemcpyHostToDevice));
         /* copy the status bits and valid flags for all heaps to arrays separate
            from the index, so that it can be combined with the corresponding
            values from the previous block */
@@ -336,6 +337,7 @@ void do_proc(struct vegas_databuf *db_in,
     iProcData = 0;
     while (g_iBlockInDataSize > iProcData)  /* loop till (num_heaps * heap_size) of data is processed */
     {
+        #if 0
         if (0 == pfb_count)
         {
             /* Check if all heaps necessary for this PFB are valid */
@@ -366,6 +368,7 @@ void do_proc(struct vegas_databuf *db_in,
                 continue;
             }
         }
+        #endif
 
         CopyDataForFFT<<<g_dimGCopy, g_dimBCopy>>>(g_pc4DataRead_d,
                                                    g_pf4FFTIn_d);
@@ -565,8 +568,6 @@ void do_proc(struct vegas_databuf *db_in,
             /* Set basic params in output index */
             index_out->heap_size = sizeof(struct freq_spead_heap) + (g_iNumSubBands * g_nchan * sizeof(float4));
         }
-
-        pfb_count = (pfb_count + 1) % VEGAS_NUM_TAPS;
     }
 
     return;
@@ -597,7 +598,7 @@ int accumulate()
     cudaError_t iCUDARet = cudaSuccess;
 
     Accumulate<<<g_dimGAccum, g_dimBAccum>>>(g_pf4FFTOut_d,
-                                             g_pf4SumStokes_d);
+                                             g_ppf4SumStokes_d[g_iAccID]);
     CUDASafeCall(cudaThreadSynchronize());
     iCUDARet = cudaGetLastError();
     if (iCUDARet != cudaSuccess)
@@ -612,11 +613,11 @@ int accumulate()
 
 void zero_accumulator()
 {
-    CUDASafeCall(cudaMemset(g_pf4SumStokes_d,
-                                       '\0',
-                                       (g_iNumSubBands
-                                       * g_nchan
-                                       * sizeof(float4))));
+    CUDASafeCall(cudaMemset(g_ppf4SumStokes_d[g_iAccID],
+                            '\0',
+                            (g_iNumSubBands
+                             * g_nchan
+                             * sizeof(float4))));
 
     return;
 }
@@ -624,11 +625,11 @@ void zero_accumulator()
 int get_accumulated_spectrum_from_device(char *out)
 {
     CUDASafeCall(cudaMemcpy(out,
-                                       g_pf4SumStokes_d,
-                                       (g_iNumSubBands
-                                        * g_nchan
-                                        * sizeof(float4)),
-                                       cudaMemcpyDeviceToHost));
+                            g_ppf4SumStokes_d[g_iAccID],
+                            (g_iNumSubBands
+                             * g_nchan
+                             * sizeof(float4)),
+                            cudaMemcpyDeviceToHost));
 
     return VEGAS_OK;
 }
@@ -714,10 +715,28 @@ void cleanup_gpu()
         (void) cudaFree(g_pf4FFTOut_d);
         g_pf4FFTOut_d = NULL;
     }
-    if (g_pf4SumStokes_d != NULL)
+    for (int i = 0; i < g_iNumChanBlocks; ++i)
     {
-        (void) cudaFree(g_pf4SumStokes_d);
-        g_pf4SumStokes_d = NULL;
+        if (g_ppf4SumStokes[i] != NULL)
+        {
+            free(g_ppf4SumStokes[i]);
+            g_ppf4SumStokes[i] = NULL;
+        }
+        if (g_ppf4SumStokes_d[i] != NULL)
+        {
+            (void) cudaFree(g_ppf4SumStokes_d[i]);
+            g_ppf4SumStokes_d[i] = NULL;
+        }
+    }
+    if (g_ppf4SumStokes != NULL)
+    {
+        free(g_ppf4SumStokes);
+        g_ppf4SumStokes = NULL;
+    }
+    if (g_ppf4SumStokes_d != NULL)
+    {
+        free(g_ppf4SumStokes_d);
+        g_ppf4SumStokes_d = NULL;
     }
 
     /* destroy plan */
