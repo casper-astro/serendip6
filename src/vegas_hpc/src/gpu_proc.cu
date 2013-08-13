@@ -70,9 +70,9 @@ int g_iAccID = 0;
 int g_iReadID = 0;
 
 void __CUDASafeCall(cudaError_t iCUDARet,
-                               const char* pcFile,
-                               const int iLine,
-                               void (*pCleanUp)(void));
+                    const char* pcFile,
+                    const int iLine,
+                    void (*pCleanUp)(void));
 
 #define CUDASafeCall(iRet)   __CUDASafeCall(iRet,                             \
                                             __FILE__,                         \
