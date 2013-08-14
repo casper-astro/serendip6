@@ -24,7 +24,7 @@
 
 /* Thread declarations */
 void *vegas_net_thread(void *args);
-void *vegas_pfb_thread(void *args);
+void *vegas_gpu_thread(void *args);
 void *vegas_accum_thread(void *args);
 
 #if FITS_TYPE == PSRFITS
@@ -155,7 +155,7 @@ int main(int argc, char *argv[]) {
     /* Launch PFB thread */
     pthread_t pfb_thread_id;
 
-    rv = pthread_create(&pfb_thread_id, NULL, vegas_pfb_thread, (void *)&pfb_args);
+    rv = pthread_create(&pfb_thread_id, NULL, vegas_gpu_thread, (void *)&pfb_args);
 
     if (rv) { 
         fprintf(stderr, "Error creating PFB thread.\n");

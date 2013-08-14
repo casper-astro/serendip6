@@ -287,13 +287,12 @@ void do_proc(struct vegas_databuf *db_in,
                                   g_iNumSubBands * sizeof(char4),    /* src. pitch */
                                   g_iNumConcFFT * sizeof(char4),
                                   g_nchan,
-                                  //g_iBlockInDataSize,
                                   cudaMemcpyHostToDevice));
-
+                                  //g_iBlockInDataSize,
         /* copy the status bits and valid flags for all heaps to arrays separate
            from the index, so that it can be combined with the corresponding
            values from the previous block */
-        struct time_spead_heap* time_heap = (struct time_spead_heap*) vegas_databuf_data(db_in, curblock_in);
+        struct time_spead_heap* time_heap;// = (struct time_spead_heap*) vegas_databuf_data(db_in, curblock_in);
         for (i = 0; i < index_in->num_heaps; ++i)
         {
             g_auiStatusBits[i] = time_heap->status_bits;
@@ -309,8 +308,8 @@ void do_proc(struct vegas_databuf *db_in,
                                   g_iNumSubBands * sizeof(char4),    /* src. pitch */
                                   g_iNumConcFFT * sizeof(char4),
                                   g_nchan,
-                                  //g_iBlockInDataSize,
                                   cudaMemcpyHostToDevice));
+                                  //g_iBlockInDataSize,
 ////??????^^^^^
        // CUDASafeCall(cudaMemcpy(g_pc4Data_d + ((VEGAS_NUM_TAPS - 1) * g_iNumSubBands * g_nchan),
        //                         payload_addr_in,
@@ -532,7 +531,7 @@ void do_proc(struct vegas_databuf *db_in,
             /* Mark output buffer as filled */
             vegas_databuf_set_filled(db_out, g_iPFBCurBlockOut);
 
-            printf("Debug: vegas_pfb_thread going to next output block\n");
+            printf("Debug: vegas_gpu_thread going to next output block\n");
 
             /* Note current output block */
             /* NOTE: vegas_status_lock_safe() and vegas_status_unlock_safe() are macros
@@ -671,9 +670,9 @@ int is_blanked(int heap_start, int num_heaps)
 }
 
 void __CUDASafeCall(cudaError_t iCUDARet,
-                               const char* pcFile,
-                               const int iLine,
-                               void (*pCleanUp)(void))
+                    const char* pcFile,
+                    const int iLine,
+                    void (*pCleanUp)(void))
 {
     if (iCUDARet != cudaSuccess)
     {

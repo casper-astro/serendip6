@@ -46,7 +46,7 @@ void srv_quit(int sig) { srv_run=0; }
 /* Thread declarations */
 void *vegas_net_thread(void *args);
 void *vegas_null_thread(void *args);
-void *vegas_pfb_thread(void *args);
+void *vegas_gpu_thread(void *args);
 void *vegas_accum_thread(void *args);
 void *vegas_rawdisk_thread(void *args);
 
@@ -99,7 +99,7 @@ void start_lbw_mode(struct vegas_thread_args *args, pthread_t *ids) {
     // TODO error checking...
     int rv;
     rv = pthread_create(&ids[0], NULL, vegas_net_thread, (void*)&args[0]);
-    rv = pthread_create(&ids[1], NULL, vegas_pfb_thread, (void*)&args[1]);
+    rv = pthread_create(&ids[1], NULL, vegas_gpu_thread, (void*)&args[1]);
     rv = pthread_create(&ids[2], NULL, vegas_accum_thread, (void*)&args[2]);
 }
 
