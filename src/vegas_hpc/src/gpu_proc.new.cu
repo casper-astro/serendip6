@@ -43,6 +43,8 @@ float4* g_pf4FFTOut_d = NULL;
 char4* g_pc4InBuf = NULL;
 char4* g_pc4InBufRead = NULL;
 char4* g_pc4Data_d = NULL;              /* raw data starting address */
+char4* g_pc4DataRead_d = NULL;          /* raw data read address */
+char4* g_pc4DataStage_d = NULL;              /* data staging area address */
 dim3 g_dimBCopy(1, 1, 1);
 dim3 g_dimGCopy(1, 1);
 dim3 g_dimBAccum(1, 1, 1);
@@ -119,6 +121,12 @@ int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, in
        starts flowing, allocate the maximum possible size */
     CUDASafeCall(cudaMalloc((void **) &g_pc4Data_d,
                             g_buf_in_block_size));
+    g_pc4DataRead_d = g_pc4Data_d;
+
+    /* allocate memory for data staging area. this is where
+       (g_iNumConcFFT * g_nchan) samples are stored for FFT */
+    CUDASafeCall(cudaMalloc((void **) &g_pc4DataStage_d,
+                            (g_iNumConcFFT * g_nchan * sizeof(char4))));
 
     /* calculate kernel parameters */
     /* ASSUMPTION: g_nchan >= iMaxThreadsPerBlock */
@@ -221,7 +229,6 @@ void do_proc(struct vegas_databuf *db_in,
     cudaError_t iCUDARet = cudaSuccess;
     int iRet = VEGAS_OK;
     char* payload_addr_in = NULL;
-    char* payload_addr_in_ref = NULL;
     char* payload_addr_out = NULL;
     int num_in_heaps_per_proc = 0;
     int num_in_heaps_gpu_buffer = 0;
@@ -232,7 +239,7 @@ void do_proc(struct vegas_databuf *db_in,
     index_in = (struct databuf_index*)vegas_databuf_index(db_in, curblock_in);
     /* Get the number of heaps per block of data that will be processed by the GPU */
     g_iBlockInDataSize = (index_in->num_heaps * index_in->heap_size) - (index_in->num_heaps * sizeof(struct time_spead_heap));
-    num_in_heaps_per_proc = g_iBlockInDataSize / (index_in->heap_size - sizeof(struct time_spead_heap));
+    num_in_heaps_per_proc = (g_iNumConcFFT * g_nchan * sizeof(char4)) / (index_in->heap_size - sizeof(struct time_spead_heap));
     num_in_heaps_gpu_buffer = index_in->num_heaps;
 
     /* Calculate the maximum number of output heaps per block */
@@ -259,8 +266,7 @@ void do_proc(struct vegas_databuf *db_in,
        copied to the GPU (heap_in = 0) */
     payload_addr_in = (char*)(vegas_databuf_data(db_in, curblock_in) +
                         sizeof(struct time_spead_heap) * MAX_HEAPS_PER_BLK +
-                        (index_in->heap_size - sizeof(struct time_spead_heap)) * heap_in );
-    payload_addr_in_ref = payload_addr_in;
+                        (index_in->heap_size - sizeof(struct time_spead_heap)) * heap_in);
 
     if (first)
     {
@@ -278,28 +284,23 @@ void do_proc(struct vegas_databuf *db_in,
                             payload_addr_in,
                             g_iBlockInDataSize,
                             cudaMemcpyHostToDevice));
+    struct time_spead_heap* time_heap = (struct time_spead_heap*) vegas_databuf_data(db_in, curblock_in);
+    for (i = 0; i < index_in->num_heaps; ++i)
+    {
+        g_auiStatusBits[i] = time_heap->status_bits;
+        g_auiHeapValid[i] = index_in->cpu_gpu_buf[i].heap_valid;
+        ++time_heap;
+    }
 
+    g_pc4DataRead_d = g_pc4Data_d;
     while (!is_proc_done)
     {
-        /* copy data for one chunk of FFT from input block to GPU */
-        payload_addr_in = read_gpu_input_data(payload_addr_in);
-        if ((payload_addr_in - payload_addr_in_ref) == g_iBlockInDataSize)
-        {
-            is_proc_done = 1;
-            fprintf(stderr, "****************PROC DONE!********************\n");
-        }
-
-        struct time_spead_heap* time_heap = (struct time_spead_heap*) vegas_databuf_data(db_in, curblock_in);
-        for (i = 0; i < index_in->num_heaps; ++i)
-        {
-            g_auiStatusBits[i] = time_heap->status_bits;
-            g_auiHeapValid[i] = index_in->cpu_gpu_buf[i].heap_valid;
-            ++time_heap;
-        }
-
         g_iAccID = 0;
         while (g_iAccID < g_iNumChanBlocks)  /* loop till (g_iNumSubBands * g_nchan * sizeof(char4)) of data is processed */
         {
+            /* copy data for one chunk of FFT from input block to GPU */
+            read_gpu_input_data();
+
             #if 0
             if (0 == pfb_count)
             {
@@ -333,7 +334,7 @@ void do_proc(struct vegas_databuf *db_in,
             }
             #endif
 
-            CopyDataForFFT<<<g_dimGCopy, g_dimBCopy>>>(g_pc4Data_d,
+            CopyDataForFFT<<<g_dimGCopy, g_dimBCopy>>>(g_pc4DataStage_d,
                                                        g_pf4FFTIn_d);
             CUDASafeCall(cudaThreadSynchronize());
             iCUDARet = cudaGetLastError();
@@ -421,6 +422,17 @@ void do_proc(struct vegas_databuf *db_in,
                 }
             }
 
+            /* Calculate input heap addresses for the next round of processing */
+            heap_in += num_in_heaps_per_proc;
+            heap_addr_in = (char*)(vegas_databuf_data(db_in, curblock_in) +
+                                sizeof(struct time_spead_heap) * heap_in);
+            if (0 == g_iSpecPerAcc)
+            {
+                first_time_heap_in_accum = (struct time_spead_heap*)(heap_addr_in);
+                g_iFirstHeapIn = heap_in;
+                g_dFirstHeapRcvdMJD = index_in->cpu_gpu_buf[g_iFirstHeapIn].heap_rcvd_mjd;
+            }
+
             /* if output block is full */
             if (g_iHeapOut == g_iMaxNumHeapOut)
             {
@@ -463,56 +475,53 @@ void do_proc(struct vegas_databuf *db_in,
 
             /* update the accumulator ID */
             ++g_iAccID;
-        }
 
-        /* Calculate input heap addresses for the next round of processing */
-        heap_in += num_in_heaps_per_proc;
-        heap_addr_in = (char*)(vegas_databuf_data(db_in, curblock_in) +
-                            sizeof(struct time_spead_heap) * heap_in);
-        if (0 == g_iSpecPerAcc)
-        {
-            first_time_heap_in_accum = (struct time_spead_heap*)(heap_addr_in);
-            g_iFirstHeapIn = heap_in;
-            g_dFirstHeapRcvdMJD = index_in->cpu_gpu_buf[g_iFirstHeapIn].heap_rcvd_mjd;
+            fprintf(stderr, "%ld\n", g_pc4DataRead_d);
+            if ((g_pc4DataRead_d - g_pc4Data_d) == g_iBlockInDataSize)
+            {
+                is_proc_done = 1;
+                fprintf(stderr, "****************PROC DONE!********************\n");
+                break;
+            }
         }
     }
 
     return;
 }
 
-char* read_gpu_input_data(char* payload_read_in)
+void read_gpu_input_data()
 {
     /* write new data to the write buffer */
     /* strided copy of g_iNumConcFFT channels (* 2 polarizations) */
-    CUDASafeCall(cudaMemcpy2D(g_pc4Data_d,
+    CUDASafeCall(cudaMemcpy2D(g_pc4DataStage_d,
                               g_iNumConcFFT * sizeof(char4),     /* dest. pitch */
-                              payload_read_in,
+                              g_pc4DataRead_d,
                               g_iNumSubBands * sizeof(char4),    /* src. pitch */
                               g_iNumConcFFT * sizeof(char4),
                               g_nchan,
-                              cudaMemcpyHostToDevice));
+                              cudaMemcpyDeviceToDevice));
     /* update the read pointer to where data needs to be read in from, in the
        next read */
     if (g_iNumConcFFT == g_iNumSubBands)
     {
-        payload_read_in += (g_iNumSubBands * g_nchan * sizeof(char4));
+        g_pc4DataRead_d += (g_iNumSubBands * g_nchan);
     }
     else
     {
         if ((g_iNumChanBlocks - 1) == g_iReadID)
         {
-            payload_read_in += ((g_iNumConcFFT % g_iNumSubBands) * sizeof(char4));
-            payload_read_in += (g_iNumSubBands * (g_nchan - 1) * sizeof(char4));
+            g_pc4DataRead_d += ((g_iNumConcFFT % g_iNumSubBands));
+            g_pc4DataRead_d += (g_iNumSubBands * (g_nchan - 1));
         }
         else
         {
-            payload_read_in += (g_iNumConcFFT * sizeof(char4));
+            g_pc4DataRead_d += g_iNumConcFFT;
         }
     }
 
     g_iReadID = (g_iReadID + 1) % g_iNumChanBlocks;
 
-    return payload_read_in;
+    return;
 }
 
 /* function that performs the FFT */
@@ -630,6 +639,11 @@ void cleanup_gpu()
     {
         (void) cudaFree(g_pc4Data_d);
         g_pc4Data_d = NULL;
+    }
+    if (g_pc4DataStage_d != NULL)
+    {
+        (void) cudaFree(g_pc4DataStage_d);
+        g_pc4DataStage_d = NULL;
     }
     if (g_pf4FFTIn_d != NULL)
     {

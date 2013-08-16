@@ -28,7 +28,7 @@ void do_proc(struct vegas_databuf *db_in,
              struct vegas_status st,
              int acc_len);
 
-char* read_gpu_input_data(char* payload_read_in);
+void read_gpu_input_data();
 
 int do_fft();
 

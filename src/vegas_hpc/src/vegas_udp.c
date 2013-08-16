@@ -146,7 +146,7 @@ int vegas_udp_recv(struct vegas_udp_params *p, struct vegas_udp_packet *b, char 
 	            memcpy(b->data,sphead,72); // copy the header template
 	            unsigned int *hdr = (unsigned int *) b->data;
                 unsigned long pktnum = ((unsigned long) (ntohl(((unsigned int*) tempbuf)[0])) << 32) + ntohl(((unsigned int*) tempbuf)[1]);
-				unsigned long tmcounter = pktnum * 2048;
+                unsigned long tmcounter = pktnum * 2048;
                 hdr[1*2+0] = hdr[1*2+0] | htonl((unsigned int) ((pktnum >> 32) & 0x00000000000000FF));
 	            hdr[1*2+1] = htonl((unsigned int) (pktnum & 0x00000000FFFFFFFF));
 	            hdr[5*2+1] = htonl((tmcounter - 10) & 0x000000FFFFFFFFFF);

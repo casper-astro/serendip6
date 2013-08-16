@@ -6,7 +6,7 @@
 !_TAG_PROGRAM_VERSION	5.6	//
 A	sla.c	/^                           DOUBLE(A),$/;"	v
 A	sla.c	/^                          DOUBLE_ARRAY(A),$/;"	v
-Accumulate	pfb_gpu_kernels.cu	/^__global__ void Accumulate(float4 *pf4FFTOut,$/;"	f
+Accumulate	gpu_kernels.cu	/^__global__ void Accumulate(float4 *pf4FFTOut,$/;"	f
 B	sla.c	/^                           DOUBLE(B),$/;"	v
 B	sla.c	/^                          DOUBLE_ARRAY(B),$/;"	v
 B1	sla.c	/^                               DOUBLE(B1),$/;"	v
@@ -42,8 +42,8 @@ CNF_CONST	f77.h	113;"	d
 CNF_MACROS	f77.h	99;"	d
 CNF_OLD_DEFINED	f77.h	890;"	d
 CPU_INPUT_BUF	vegas_databuf.h	39;"	d
-CUDASafeCall	gpuproc.cu	76;"	d	file:
-CUDASafeCall	pfb_gpu.cu	76;"	d	file:
+CUDASafeCall	gpu_proc.cu	75;"	d	file:
+CopyDataForFFT	gpu_kernels.cu	/^__global__ void CopyDataForFFT(char4 *pc4Data,$/;"	f
 D1950	sla.c	/^                           DOUBLE(D1950),$/;"	v
 D2000	sla.c	/^                           DOUBLE(D2000),$/;"	v
 D5	sla.c	/^                           DOUBLE(D5),$/;"	v
@@ -122,7 +122,6 @@ DOUBLE_ARRAY_ARG	f77.h	534;"	d
 DOUBLE_FUNCTION	f77.h	245;"	d
 DOUBLE_FUNCTION_ARG	f77.h	523;"	d
 DSB	sla.c	/^                            DOUBLE(DSB),$/;"	v
-DoPFB	pfb_gpu_kernels.cu	/^__global__ void DoPFB(char4* pc4Data,$/;"	f
 EL	sla.c	/^                          DOUBLE(EL),$/;"	v
 EP1	sla.c	/^                          DOUBLE(EP1),$/;"	v
 F77_ASSOC_BYTE_ARRAY	f77.h	408;"	d
@@ -271,16 +270,13 @@ F77_UWORD_FUNCTION	f77.h	212;"	d
 F77_UWORD_TYPE	f77.h	168;"	d
 F77_WORD_FUNCTION	f77.h	210;"	d
 F77_WORD_TYPE	f77.h	166;"	d
-FALSE	pfb_gpu.h	6;"	d
-FFTPLAN_BATCH	pfb_gpu.h	20;"	d
-FFTPLAN_IDIST	pfb_gpu.h	18;"	d
-FFTPLAN_ISTRIDE	pfb_gpu.h	16;"	d
-FFTPLAN_ODIST	pfb_gpu.h	19;"	d
-FFTPLAN_OSTRIDE	pfb_gpu.h	17;"	d
-FFTPLAN_RANK	pfb_gpu.h	15;"	d
-FILE_COEFF_DATATYPE	pfb_gpu.h	12;"	d
-FILE_COEFF_PREFIX	pfb_gpu.h	11;"	d
-FILE_COEFF_SUFFIX	pfb_gpu.h	13;"	d
+FALSE	gpu_proc.h	6;"	d
+FFTPLAN_BATCH	gpu_proc.h	14;"	d
+FFTPLAN_IDIST	gpu_proc.h	12;"	d
+FFTPLAN_ISTRIDE	gpu_proc.h	10;"	d
+FFTPLAN_ODIST	gpu_proc.h	13;"	d
+FFTPLAN_OSTRIDE	gpu_proc.h	11;"	d
+FFTPLAN_RANK	gpu_proc.h	9;"	d
 FITS_TYPE	vegas_defines.h	26;"	d
 FITS_typecode	psrfits.h	/^    int FITS_typecode;      \/\/ FITS data typecode as per CFITSIO$/;"	m	struct:subint
 FLOAT_PAYLOAD	vegas_accum_thread.c	38;"	d	file:
@@ -355,13 +351,13 @@ N	sla.c	/^                         INTEGER(N),$/;"	v
 NEW_GBT	vegas_defines.h	12;"	d
 NUM_STOKES	vegas_accum_thread.c	35;"	d	file:
 NUM_SW_STATES	vegas_accum_thread.c	32;"	d	file:
-PACKET_SIZE_1SFA	vegas_udp.c	216;"	d	file:
-PACKET_SIZE_1SFA_OLD	vegas_udp.c	217;"	d	file:
-PACKET_SIZE_FAST4K	vegas_udp.c	218;"	d	file:
-PACKET_SIZE_ORIG	vegas_udp.c	214;"	d	file:
-PACKET_SIZE_PASP	vegas_udp.c	219;"	d	file:
-PACKET_SIZE_SHORT	vegas_udp.c	215;"	d	file:
-PACKET_SIZE_SPEAD	vegas_udp.c	220;"	d	file:
+PACKET_SIZE_1SFA	vegas_udp.c	198;"	d	file:
+PACKET_SIZE_1SFA_OLD	vegas_udp.c	199;"	d	file:
+PACKET_SIZE_FAST4K	vegas_udp.c	200;"	d	file:
+PACKET_SIZE_ORIG	vegas_udp.c	196;"	d	file:
+PACKET_SIZE_PASP	vegas_udp.c	201;"	d	file:
+PACKET_SIZE_SHORT	vegas_udp.c	197;"	d	file:
+PACKET_SIZE_SPEAD	vegas_udp.c	202;"	d	file:
 PAYLOAD_SIZE	vegas_defines.h	30;"	d
 PHI	sla.c	/^                            DOUBLE(PHI),$/;"	v
 POINTER	f77.h	239;"	d
@@ -393,13 +389,12 @@ SOL	vegas_params.c	31;"	d	file:
 SPEAD	vegas_defines.h	15;"	d
 SPEAD_NUM_ITEMS	spead_heap.h	4;"	d
 SPEAD_SPECTRUM_SZ	vegas_fake_net_thread.c	41;"	d	file:
-STATUS_KEY	gpuproc.cu	27;"	d	file:
-STATUS_KEY	pfb_gpu.cu	27;"	d	file:
+STATUS_KEY	gpu_proc.cu	27;"	d	file:
 STATUS_KEY	vegas_accum_thread.c	29;"	d	file:
 STATUS_KEY	vegas_fake_net_thread.c	30;"	d	file:
+STATUS_KEY	vegas_gpu_thread.c	26;"	d	file:
 STATUS_KEY	vegas_net_thread.c	28;"	d	file:
 STATUS_KEY	vegas_null_thread.c	23;"	d	file:
-STATUS_KEY	vegas_pfb_thread.c	25;"	d	file:
 STATUS_KEY	vegas_psrfits_thread.c	26;"	d	file:
 STATUS_KEY	vegas_rawdisk_thread.c	22;"	d	file:
 STATUS_KEY	vegas_sdfits_thread.c	25;"	d	file:
@@ -423,7 +418,7 @@ TRAIL_ARG	f77.h	597;"	d
 TRAIL_ARG	f77.h	598;"	d
 TRAIL_ARG	f77.h	747;"	d
 TRAIL_ARG	f77.h	748;"	d
-TRUE	pfb_gpu.h	7;"	d
+TRUE	gpu_proc.h	7;"	d
 UBYTE	f77.h	233;"	d
 UBYTE_ARG	f77.h	514;"	d
 UBYTE_ARRAY	f77.h	262;"	d
@@ -449,7 +444,6 @@ VEGAS_ERR_SYS	vegas_error.h	12;"	d
 VEGAS_LOCK	vegas_status.h	19;"	d
 VEGAS_MAX_PACKET_SIZE	vegas_udp.h	14;"	d
 VEGAS_NOLOCK	vegas_status.h	20;"	d
-VEGAS_NUM_TAPS	pfb_gpu.h	9;"	d
 VEGAS_OK	vegas_error.h	9;"	d
 VEGAS_STATUS_CARD	vegas_status.h	17;"	d
 VEGAS_STATUS_KEY	vegas_status.h	14;"	d
@@ -466,15 +460,15 @@ WORD_FUNCTION_ARG	f77.h	527;"	d
 _F77_KR	f77.h	622;"	d
 _GNU_SOURCE	vegas_accum_thread.c	8;"	d	file:
 _GNU_SOURCE	vegas_fake_net_thread.c	8;"	d	file:
+_GNU_SOURCE	vegas_gpu_thread.c	7;"	d	file:
 _GNU_SOURCE	vegas_net_thread.c	7;"	d	file:
 _GNU_SOURCE	vegas_null_thread.c	6;"	d	file:
-_GNU_SOURCE	vegas_pfb_thread.c	6;"	d	file:
 _GNU_SOURCE	vegas_psrfits_thread.c	6;"	d	file:
 _GNU_SOURCE	vegas_rawdisk_thread.c	6;"	d	file:
 _GNU_SOURCE	vegas_sdfits_thread.c	6;"	d	file:
+_GPU_KERNELS	gpu_kernels.h	2;"	d
+_GPU_PROC_H	gpu_proc.h	2;"	d
 _ISOC99_SOURCE	write_sdfits.c	2;"	d	file:
-_PFB_GPU_H	pfb_gpu.h	2;"	d
-_PFB_GPU_KERNELS	pfb_gpu_kernels.h	2;"	d
 _PSRFITS_H	psrfits.h	3;"	d
 _SDFITS_H	sdfits.h	3;"	d
 _SPEAD_HEAP_H_	spead_heap.h	2;"	d
@@ -488,8 +482,7 @@ _VEGAS_THREAD_ARGS_H	vegas_thread_args.h	2;"	d
 _VEGAS_THREAD_MAIN_H	vegas_thread_main.h	7;"	d
 _VEGAS_TIME_H	vegas_time.h	6;"	d
 _VEGAS_UDP_H	vegas_udp.h	7;"	d
-__CUDASafeCall	gpuproc.cu	/^void __CUDASafeCall(cudaError_t iCUDARet,$/;"	f
-__CUDASafeCall	pfb_gpu.cu	/^void __CUDASafeCall(cudaError_t iCUDARet,$/;"	f
+__CUDASafeCall	gpu_proc.cu	/^void __CUDASafeCall(cudaError_t iCUDARet,$/;"	f
 __buf	vegas_databuf.h	/^    struct seminfo *__buf;$/;"	m	union:semun	typeref:struct:semun::seminfo
 _dec_unix	f77.h	765;"	d
 _dec_unix	f77.h	768;"	d
@@ -497,8 +490,7 @@ _dec_unix	f77.h	771;"	d
 _dec_unix	f77.h	774;"	d
 _fitshead_h_	fitshead.h	33;"	d
 accumid	sdfits.h	/^    int accumid;            \/\/ ID of the accumulator from where the spectrum came$/;"	m	struct:sdfits_data_columns
-accumulate	gpuproc.cu	/^int accumulate()$/;"	f
-accumulate	pfb_gpu.cu	/^int accumulate()$/;"	f
+accumulate	gpu_proc.cu	/^int accumulate()$/;"	f
 array	vegas_databuf.h	/^    unsigned short *array;$/;"	m	union:semun
 array_offset	vegas_databuf.h	/^    unsigned int array_offset;$/;"	m	struct:disk_buf_index
 array_size	vegas_databuf.h	/^        unsigned int array_size;    \/\/Size of a single data array$/;"	m	union:databuf_index::__anon2
@@ -535,14 +527,13 @@ cal_mode	sdfits.h	/^    char cal_mode[16];      \/\/ Cal mode (OFF, SYNC, EXT1, 
 cal_phs	psrfits.h	/^    double cal_phs;         \/\/ Cal phase (wrt start time)$/;"	m	struct:hdrinfo
 cal_phs	sdfits.h	/^    double cal_phs;         \/\/ Cal phase (wrt start time)$/;"	m	struct:hdrinfo
 cc	vegas_thread_main.h	/^void cc(int sig) { run=0; }$/;"	f
-centre_freq	sdfits.h	/^    double centre_freq[8];  \/\/ Frequency at centre of each sub-band$/;"	m	struct:sdfits_data_columns
+centre_freq	sdfits.h	/^    double centre_freq[128];  \/\/ Frequency at centre of each sub-band$/;"	m	struct:sdfits_data_columns
 centre_freq_idx	sdfits.h	/^    float centre_freq_idx;  \/\/ Index of centre frequency bin$/;"	m	struct:sdfits_data_columns
 chan_bw	sdfits.h	/^    double chan_bw;         \/\/ Width of each spectral bin$/;"	m	struct:hdrinfo
 chan_dm	psrfits.h	/^    double chan_dm;         \/\/ DM that each channel was de-dispersed at (pc\/cm^3)$/;"	m	struct:hdrinfo
 change_endian64	vegas_udp.c	/^unsigned long long change_endian64(const unsigned long long *d) {$/;"	f
 check_thread_exit	vegas_hpc_server.c	/^int check_thread_exit(struct vegas_thread_args *args, int nthread) {$/;"	f
-cleanup_gpu	gpuproc.cu	/^void cleanup_gpu()$/;"	f
-cleanup_gpu	pfb_gpu.cu	/^void cleanup_gpu()$/;"	f
+cleanup_gpu	gpu_proc.cu	/^void cleanup_gpu()$/;"	f
 cnf_calloc	f77.h	892;"	d
 cnf_copyf	f77.h	893;"	d
 cnf_cptr	f77.h	894;"	d
@@ -611,10 +602,8 @@ destroy_accumulators	vegas_accum_thread.c	/^void destroy_accumulators(float **ac
 df	psrfits.h	/^    double df;              \/\/ Frequency spacing between the channels (MHz)$/;"	m	struct:hdrinfo
 disk_buf	vegas_databuf.h	/^        struct disk_buf_index disk_buf[2*MAX_HEAPS_PER_BLK];$/;"	m	union:databuf_index::__anon3	typeref:struct:databuf_index::__anon3::disk_buf_index
 disk_buf_index	vegas_databuf.h	/^struct disk_buf_index$/;"	s
-do_fft	gpuproc.cu	/^int do_fft()$/;"	f
-do_fft	pfb_gpu.cu	/^int do_fft()$/;"	f
-do_pfb	gpuproc.cu	/^void do_pfb(struct vegas_databuf *db_in,$/;"	f
-do_pfb	pfb_gpu.cu	/^void do_pfb(struct vegas_databuf *db_in,$/;"	f
+do_fft	gpu_proc.cu	/^int do_fft()$/;"	f
+do_proc	gpu_proc.cu	/^void do_proc(struct vegas_databuf *db_in,$/;"	f
 drop_frac	vegas_params.h	/^    double drop_frac;           \/\/ Fraction of dropped packets in this block$/;"	m	struct:vegas_params
 drop_frac_avg	vegas_params.h	/^    double drop_frac_avg;       \/\/ Running average of the fract of dropped packets$/;"	m	struct:vegas_params
 drop_frac_tot	vegas_params.h	/^    double drop_frac_tot;       \/\/ Total fraction of dropped packets$/;"	m	struct:vegas_params
@@ -659,62 +648,33 @@ freq_spead_heap	spead_heap.h	/^struct freq_spead_heap {$/;"	s
 freqres	sdfits.h	/^    double freqres;         \/\/ Width of each spectral channel in the file$/;"	m	struct:hdrinfo
 frontend	psrfits.h	/^    char frontend[24];      \/\/ Frontend used$/;"	m	struct:hdrinfo
 frontend	sdfits.h	/^    char frontend[16];      \/\/ Frontend used$/;"	m	struct:hdrinfo
-g_acFileCoeff	gpuproc.cu	/^char g_acFileCoeff[256] = {0};$/;"	v
-g_acFileCoeff	pfb_gpu.cu	/^char g_acFileCoeff[256] = {0};$/;"	v
-g_auiHeapValid	gpuproc.cu	/^unsigned int g_auiHeapValid[2*MAX_HEAPS_PER_BLK] = {0};$/;"	v
-g_auiHeapValid	pfb_gpu.cu	/^unsigned int g_auiHeapValid[2*MAX_HEAPS_PER_BLK] = {0};$/;"	v
-g_auiStatusBits	gpuproc.cu	/^unsigned int g_auiStatusBits[2*MAX_HEAPS_PER_BLK] = {0};$/;"	v
-g_auiStatusBits	pfb_gpu.cu	/^unsigned int g_auiStatusBits[2*MAX_HEAPS_PER_BLK] = {0};$/;"	v
-g_buf_in_block_size	gpuproc.cu	/^size_t g_buf_in_block_size;$/;"	v
-g_buf_in_block_size	pfb_gpu.cu	/^size_t g_buf_in_block_size;$/;"	v
-g_buf_out_block_size	gpuproc.cu	/^size_t g_buf_out_block_size;$/;"	v
-g_buf_out_block_size	pfb_gpu.cu	/^size_t g_buf_out_block_size;$/;"	v
-g_dFirstHeapRcvdMJD	gpuproc.cu	/^double g_dFirstHeapRcvdMJD = 0.0;$/;"	v
-g_dFirstHeapRcvdMJD	pfb_gpu.cu	/^double g_dFirstHeapRcvdMJD = 0.0;$/;"	v
-g_iBlockInDataSize	gpuproc.cu	/^int g_iBlockInDataSize = 0;$/;"	v
-g_iBlockInDataSize	pfb_gpu.cu	/^int g_iBlockInDataSize = 0;$/;"	v
-g_iFileCoeff	gpuproc.cu	/^int g_iFileCoeff = 0;$/;"	v
-g_iFileCoeff	pfb_gpu.cu	/^int g_iFileCoeff = 0;$/;"	v
-g_iFirstHeapIn	gpuproc.cu	/^int g_iFirstHeapIn = 0;$/;"	v
-g_iFirstHeapIn	pfb_gpu.cu	/^int g_iFirstHeapIn = 0;$/;"	v
-g_iHeapOut	gpuproc.cu	/^int g_iHeapOut = 0;$/;"	v
-g_iHeapOut	pfb_gpu.cu	/^int g_iHeapOut = 0;$/;"	v
-g_iMaxNumHeapOut	gpuproc.cu	/^int g_iMaxNumHeapOut = 0;$/;"	v
-g_iMaxNumHeapOut	pfb_gpu.cu	/^int g_iMaxNumHeapOut = 0;$/;"	v
-g_iNumSubBands	gpuproc.cu	/^int g_iNumSubBands = 0;$/;"	v
-g_iNumSubBands	pfb_gpu.cu	/^int g_iNumSubBands = 0;$/;"	v
-g_iPFBCurBlockOut	gpuproc.cu	/^int g_iPFBCurBlockOut = 0;$/;"	v
-g_iPFBCurBlockOut	pfb_gpu.cu	/^int g_iPFBCurBlockOut = 0;$/;"	v
-g_iPrevBlankingState	gpuproc.cu	/^unsigned int g_iPrevBlankingState = FALSE;$/;"	v
-g_iPrevBlankingState	pfb_gpu.cu	/^unsigned int g_iPrevBlankingState = FALSE;$/;"	v
-g_iSpecPerAcc	gpuproc.cu	/^int g_iSpecPerAcc = 0;$/;"	v
-g_iSpecPerAcc	pfb_gpu.cu	/^int g_iSpecPerAcc = 0;$/;"	v
-g_iTotHeapOut	gpuproc.cu	/^int g_iTotHeapOut = 0;$/;"	v
-g_iTotHeapOut	pfb_gpu.cu	/^int g_iTotHeapOut = 0;$/;"	v
-g_nchan	gpuproc.cu	/^int g_nchan;$/;"	v
-g_nchan	pfb_gpu.cu	/^int g_nchan;$/;"	v
-g_pc4DataRead_d	gpuproc.cu	/^char4* g_pc4DataRead_d = NULL;          \/* raw data read pointer *\/$/;"	v
-g_pc4DataRead_d	pfb_gpu.cu	/^char4* g_pc4DataRead_d = NULL;          \/* raw data read pointer *\/$/;"	v
-g_pc4Data_d	gpuproc.cu	/^char4* g_pc4Data_d = NULL;              \/* raw data starting address *\/$/;"	v
-g_pc4Data_d	pfb_gpu.cu	/^char4* g_pc4Data_d = NULL;              \/* raw data starting address *\/$/;"	v
-g_pc4InBuf	gpuproc.cu	/^char4* g_pc4InBuf = NULL;$/;"	v
-g_pc4InBuf	pfb_gpu.cu	/^char4* g_pc4InBuf = NULL;$/;"	v
-g_pc4InBufRead	gpuproc.cu	/^char4* g_pc4InBufRead = NULL;$/;"	v
-g_pc4InBufRead	pfb_gpu.cu	/^char4* g_pc4InBufRead = NULL;$/;"	v
-g_pf4FFTIn_d	gpuproc.cu	/^float4* g_pf4FFTIn_d = NULL;$/;"	v
-g_pf4FFTIn_d	pfb_gpu.cu	/^float4* g_pf4FFTIn_d = NULL;$/;"	v
-g_pf4FFTOut_d	gpuproc.cu	/^float4* g_pf4FFTOut_d = NULL;$/;"	v
-g_pf4FFTOut_d	pfb_gpu.cu	/^float4* g_pf4FFTOut_d = NULL;$/;"	v
-g_pf4SumStokes_d	gpuproc.cu	/^float4* g_pf4SumStokes_d = NULL;$/;"	v
-g_pf4SumStokes_d	pfb_gpu.cu	/^float4* g_pf4SumStokes_d = NULL;$/;"	v
-g_pfPFBCoeff	gpuproc.cu	/^float *g_pfPFBCoeff = NULL;$/;"	v
-g_pfPFBCoeff	pfb_gpu.cu	/^float *g_pfPFBCoeff = NULL;$/;"	v
-g_pfPFBCoeff_d	gpuproc.cu	/^float *g_pfPFBCoeff_d = NULL;$/;"	v
-g_pfPFBCoeff_d	pfb_gpu.cu	/^float *g_pfPFBCoeff_d = NULL;$/;"	v
-g_stPlan	gpuproc.cu	/^cufftHandle g_stPlan = {0};$/;"	v
-g_stPlan	pfb_gpu.cu	/^cufftHandle g_stPlan = {0};$/;"	v
-get_accumulated_spectrum_from_device	gpuproc.cu	/^int get_accumulated_spectrum_from_device(char *out)$/;"	f
-get_accumulated_spectrum_from_device	pfb_gpu.cu	/^int get_accumulated_spectrum_from_device(char *out)$/;"	f
+g_auiHeapValid	gpu_proc.cu	/^unsigned int g_auiHeapValid[2*MAX_HEAPS_PER_BLK] = {0};$/;"	v
+g_auiStatusBits	gpu_proc.cu	/^unsigned int g_auiStatusBits[2*MAX_HEAPS_PER_BLK] = {0};$/;"	v
+g_buf_in_block_size	gpu_proc.cu	/^size_t g_buf_in_block_size;$/;"	v
+g_buf_out_block_size	gpu_proc.cu	/^size_t g_buf_out_block_size;$/;"	v
+g_dFirstHeapRcvdMJD	gpu_proc.cu	/^double g_dFirstHeapRcvdMJD = 0.0;$/;"	v
+g_iAccID	gpu_proc.cu	/^int g_iAccID = 0;$/;"	v
+g_iBlockInDataSize	gpu_proc.cu	/^int g_iBlockInDataSize = 0;$/;"	v
+g_iFirstHeapIn	gpu_proc.cu	/^int g_iFirstHeapIn = 0;$/;"	v
+g_iHeapOut	gpu_proc.cu	/^int g_iHeapOut = 0;$/;"	v
+g_iMaxNumHeapOut	gpu_proc.cu	/^int g_iMaxNumHeapOut = 0;$/;"	v
+g_iNumChanBlocks	gpu_proc.cu	/^int g_iNumChanBlocks = 0;$/;"	v
+g_iNumConcFFT	gpu_proc.cu	/^int g_iNumConcFFT = 4;$/;"	v
+g_iNumSubBands	gpu_proc.cu	/^int g_iNumSubBands = 0;$/;"	v
+g_iPFBCurBlockOut	gpu_proc.cu	/^int g_iPFBCurBlockOut = 0;$/;"	v
+g_iReadID	gpu_proc.cu	/^int g_iReadID = 0;$/;"	v
+g_iSpecPerAcc	gpu_proc.cu	/^int g_iSpecPerAcc = 0;$/;"	v
+g_iTotHeapOut	gpu_proc.cu	/^int g_iTotHeapOut = 0;$/;"	v
+g_nchan	gpu_proc.cu	/^int g_nchan;$/;"	v
+g_pc4Data_d	gpu_proc.cu	/^char4* g_pc4Data_d = NULL;              \/* raw data starting address *\/$/;"	v
+g_pc4InBuf	gpu_proc.cu	/^char4* g_pc4InBuf = NULL;$/;"	v
+g_pc4InBufRead	gpu_proc.cu	/^char4* g_pc4InBufRead = NULL;$/;"	v
+g_pf4FFTIn_d	gpu_proc.cu	/^float4* g_pf4FFTIn_d = NULL;$/;"	v
+g_pf4FFTOut_d	gpu_proc.cu	/^float4* g_pf4FFTOut_d = NULL;$/;"	v
+g_ppf4SumStokes	gpu_proc.cu	/^float4** g_ppf4SumStokes = NULL;$/;"	v
+g_ppf4SumStokes_d	gpu_proc.cu	/^float4** g_ppf4SumStokes_d = NULL;$/;"	v
+g_stPlan	gpu_proc.cu	/^cufftHandle g_stPlan = {0};$/;"	v
+get_accumulated_spectrum_from_device	gpu_proc.cu	/^int get_accumulated_spectrum_from_device(char *out)$/;"	f
 get_current_lst	vegas_time.c	/^int get_current_lst(double mjd, int *lst_secs) {$/;"	f
 get_current_mjd	vegas_time.c	/^int get_current_mjd(int *stt_imjd, int *stt_smjd, double *stt_offs) {$/;"	f
 get_current_mjd_double	vegas_time.c	/^int get_current_mjd_double(double *mjd) {$/;"	f
@@ -777,8 +737,7 @@ imswap4	raw_read.c	/^imswap4 (string,nbytes)$/;"	f
 increment_block	vegas_net_thread.c	/^void increment_block(struct datablock_stats *d, unsigned int next_heap_cntr)$/;"	f
 index_size	vegas_databuf.h	/^    size_t index_size;  \/* Size of each block's index (bytes) *\/$/;"	m	struct:vegas_databuf
 init_block	vegas_net_thread.c	/^void init_block(struct datablock_stats *d, struct vegas_databuf *db, $/;"	f
-init_gpu	gpuproc.cu	/^int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, int num_chans)$/;"	f
-init_gpu	pfb_gpu.cu	/^int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, int num_chans)$/;"	f
+init_gpu	gpu_proc.cu	/^int init_gpu(size_t input_block_sz, size_t output_block_sz, int num_subbands, int num_chans)$/;"	f
 init_hbw_mode	vegas_hpc_server.c	/^void init_hbw_mode(struct vegas_thread_args *args, int *nthread) {$/;"	f
 init_lbw_mode	vegas_hpc_server.c	/^void init_lbw_mode(struct vegas_thread_args *args, int *nthread) {$/;"	f
 init_monitor_mode	vegas_hpc_server.c	/^void init_monitor_mode(struct vegas_thread_args *args, int *nthread) {$/;"	f
@@ -788,10 +747,7 @@ integ_num	sdfits.h	/^    int integ_num;          \/\/ The integration number (in
 integ_size	spead_heap.h	/^    unsigned int integ_size;$/;"	m	struct:freq_spead_heap
 integ_size_addr_mode	spead_heap.h	/^    unsigned char integ_size_addr_mode;$/;"	m	struct:freq_spead_heap
 integ_size_id	spead_heap.h	/^    unsigned short integ_size_id;$/;"	m	struct:freq_spead_heap
-is_blanked	gpuproc.cu	/^int is_blanked(int heap_start, int num_heaps)$/;"	f
-is_blanked	pfb_gpu.cu	/^int is_blanked(int heap_start, int num_heaps)$/;"	f
-is_valid	gpuproc.cu	/^int is_valid(int heap_start, int num_heaps)$/;"	f
-is_valid	pfb_gpu.cu	/^int is_valid(int heap_start, int num_heaps)$/;"	f
+is_valid	gpu_proc.cu	/^int is_valid(int heap_start, int num_heaps)$/;"	f
 isnum	hget.c	/^isnum (string)$/;"	f
 ksearch	hget.c	/^ksearch (hstring,keyword)$/;"	f
 last_heap	vegas_fake_net_thread.c	/^    unsigned long long last_heap;   \/\/ Last heap counter written to block$/;"	m	struct:fake_datablock_stats	file:
@@ -906,6 +862,7 @@ ra2000	psrfits.h	/^    double ra2000;          \/\/ RA  of observation (deg, J20
 ra2str	hput.c	/^ra2str (string, lstr, ra, ndec)$/;"	f
 ra_str	psrfits.h	/^    char ra_str[16];        \/\/ Right Ascension string (HH:MM:SS.SSSS)$/;"	m	struct:hdrinfo
 rcvr_polns	psrfits.h	/^    int rcvr_polns;         \/\/ Number of polns provided by the receiver$/;"	m	struct:hdrinfo
+read_gpu_input_data	gpu_proc.cu	/^char* read_gpu_input_data(char* payload_read_in)$/;"	f
 remove_whitespace	misc_utils.c	/^char *remove_whitespace(char *str)$/;"	f
 reset_accumulators	vegas_accum_thread.c	/^void reset_accumulators(float **accumulator, struct sdfits_data_columns* data_cols,$/;"	f
 reset_block	vegas_net_thread.c	/^void reset_block(struct datablock_stats *d) {$/;"	f
@@ -1097,11 +1054,11 @@ vegas_find_end	vegas_status.c	/^char *vegas_find_end(char *buf) {$/;"	f
 vegas_fitsbuf_clear	vegas_databuf.c	/^void vegas_fitsbuf_clear(char *buf) {$/;"	f
 vegas_free_psrfits	vegas_params.c	/^void vegas_free_psrfits(struct psrfits *p) {$/;"	f
 vegas_free_sdfits	vegas_params.c	/^void vegas_free_sdfits(struct sdfits *sd) {$/;"	f
+vegas_gpu_thread	vegas_gpu_thread.c	/^void vegas_gpu_thread(void *_args) {$/;"	f
 vegas_net_thread	vegas_net_thread.c	/^void *vegas_net_thread(void *_args) {$/;"	f
 vegas_null_thread	vegas_null_thread.c	/^void vegas_null_thread(void *_args) {$/;"	f
 vegas_params	vegas_params.h	/^struct vegas_params {$/;"	s
 vegas_params	vegas_params.h	/^struct vegas_params$/;"	s
-vegas_pfb_thread	vegas_pfb_thread.c	/^void vegas_pfb_thread(void *_args) {$/;"	f
 vegas_psrfits_thread	vegas_psrfits_thread.c	/^void vegas_psrfits_thread(void *_args) {$/;"	f
 vegas_rawdisk_thread	vegas_rawdisk_thread.c	/^void vegas_rawdisk_thread(void *_args) {$/;"	f
 vegas_read_net_params	vegas_params.c	/^void vegas_read_net_params(char *buf, struct vegas_udp_params *u) {$/;"	f
@@ -1146,6 +1103,5 @@ verbose	hput.c	/^const static int verbose=0;\/* Set to 1 to print error messages
 write_fake_heap_to_block	vegas_fake_net_thread.c	/^void write_fake_heap_to_block(struct fake_datablock_stats *d, int heap_cntr)$/;"	f
 write_spead_packet_to_block	vegas_net_thread.c	/^void write_spead_packet_to_block(struct datablock_stats *d, struct vegas_udp_packet *p,$/;"	f
 zenith_ang	psrfits.h	/^    double zenith_ang;      \/\/ Zenith angle (commanded) at the start of the obs (deg)$/;"	m	struct:hdrinfo
-zero_accumulator	gpuproc.cu	/^void zero_accumulator()$/;"	f
-zero_accumulator	pfb_gpu.cu	/^void zero_accumulator()$/;"	f
+zero_accumulator	gpu_proc.cu	/^void zero_accumulator()$/;"	f
 zero_end_chans	vegas_psrfits_thread.c	/^void zero_end_chans(struct psrfits *pf)$/;"	f

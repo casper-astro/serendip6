@@ -6,9 +6,9 @@ fi
 # Set up status buffer
 $VEGAS_DIR/bin/check_vegas_status >& /dev/null
 # Set up first (GPU) data buffer
-$VEGAS_DIR/bin/check_vegas_databuf -c -i1 -n4 -s524288 -t1 >& /dev/null
+$VEGAS_DIR/bin/check_vegas_databuf -c -i1 -n32 -s32768 -t1 >& /dev/null
 # Set up second (CPU_ACCUM) data buffer
-$VEGAS_DIR/bin/check_vegas_databuf -c -i2 -n4 -s524288 -t2 >& /dev/null
+$VEGAS_DIR/bin/check_vegas_databuf -c -i2 -n32 -s32768 -t2 >& /dev/null
 # Set up third (DISK) data buffer
 #$VEGAS_DIR/bin/check_vegas_databuf -c -i3 -n24 -s16384 -t3 >& /dev/null
 # Display status of buffers
