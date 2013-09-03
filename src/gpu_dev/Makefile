@@ -16,12 +16,16 @@ LFLAGS_MATH = -lm
 # bin directory
 BINDIR = ./bin
 
-all: s6_gpu_standalone s6_gentestdata tags
+all: s6_gpu_standalone s6_gpu_standalone.tex s6_gentestdata tags
 
 # SERENDIP 6
 s6_gpu_standalone: s6_gpu_standalone.cu s6_gpu_standalone.h
 	$(NVCC) $(NVFLAGS) s6_gpu_standalone.cu -lm $(LFLAGS_CUFFT) $(LFLAGS_PGPLOT) -lX11 -c
 	$(CC) $(NVFLAGS) s6_gpu_standalone.o -lm $(LFLAGS_CUFFT) $(LFLAGS_PGPLOT) -lX11 -o $(BINDIR)/$@
+
+s6_gpu_standalone.tex: s6_gpu_standalone.tex.cu s6_gpu_standalone.tex.h
+	$(NVCC) $(NVFLAGS) s6_gpu_standalone.tex.cu -lm $(LFLAGS_CUFFT) $(LFLAGS_PGPLOT) -lX11 -c
+	$(CC) $(NVFLAGS) s6_gpu_standalone.tex.o -lm $(LFLAGS_CUFFT) $(LFLAGS_PGPLOT) -lX11 -o $(BINDIR)/$@
 
 # test-data-generation program
 s6_gentestdata: s6_gentestdata.c

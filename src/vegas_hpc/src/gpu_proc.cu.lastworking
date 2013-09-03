@@ -273,12 +273,6 @@ void do_proc(struct vegas_databuf *db_in,
         }
     }
 
-    /* copy the entire contents (data) of the input block to the GPU */
-    CUDASafeCall(cudaMemcpy(g_pc4Data_d,
-                            payload_addr_in,
-                            g_iBlockInDataSize,
-                            cudaMemcpyHostToDevice));
-
     while (!is_proc_done)
     {
         /* copy data for one chunk of FFT from input block to GPU */

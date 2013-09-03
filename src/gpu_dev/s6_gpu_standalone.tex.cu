@@ -6,7 +6,7 @@
  * @date 2013.07.19
  */
 
-#include "s6_gpu_standalone.h"
+#include "s6_gpu_standalone.tex.h"
 
 int g_iIsDataReadDone = FALSE;
 int g_iIsProcDone = FALSE;
@@ -34,6 +34,8 @@ int g_iNumConcFFT = 4;                  /* number of channels that are to be FFT
 int g_iNumChanBlocks = 0;
 int g_iAccID = 0;
 int g_iReadID = 0;
+texture<char4, 1, cudaReadModeNormalizedFloat> g_stTexRefData;
+cudaChannelFormatDesc g_stChanDescData;
 
 #if PLOT
 float* g_pfSumPowX = NULL;
@@ -549,6 +551,12 @@ int Init()
                                            * sizeof(float4)));
     }
 
+    g_stChanDescData = cudaCreateChannelDesc<signed char>();
+    CUDASafeCallWithCleanUp(cudaBindTexture(0,
+                                            &g_stTexRefData,
+                                            g_pc4Data_d,
+                                            &g_stChanDescData,
+                                            g_iNumConcFFT * g_iNFFT * sizeof(char4)));
     /* create plan */
     iCUFFTRet = cufftPlanMany(&g_stPlan,
                               FFTPLAN_RANK,
@@ -706,10 +714,14 @@ __global__ void CopyDataForFFT(char4 *pc4Data,
 {
     int i = (blockIdx.x * blockDim.x) + threadIdx.x;
 
+    /*
     pf4FFTIn[i].x = (float) pc4Data[i].x;
     pf4FFTIn[i].y = (float) pc4Data[i].y;
     pf4FFTIn[i].z = (float) pc4Data[i].z;
     pf4FFTIn[i].w = (float) pc4Data[i].w;
+    */
+
+    *pf4FFTIn = tex1Dfetch(g_stTexRefData, i);
 
     return;
 }

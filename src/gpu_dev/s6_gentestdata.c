@@ -131,7 +131,6 @@ int main(int argc, char *argv[])
                 cDataImX += SCALE_FACTOR
                             * (0.6 * sin(2 * M_PI * fFreqX * i / F_S));
             }
-            printf("%d, %d, ", cDataReX, cDataImX);
 
             /* write to disk */
             (void) write(iFile, &cDataReX, sizeof(signed char));
@@ -150,7 +149,6 @@ int main(int argc, char *argv[])
                 cDataImY += SCALE_FACTOR
                             * (0.6 * sin(2 * M_PI * fFreqY * i / F_S));
             }
-            printf("%d, %d\n", cDataReY, cDataImY);
 
             /* write to disk */
             (void) write(iFile, &cDataReY, sizeof(signed char));

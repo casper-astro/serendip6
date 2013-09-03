@@ -284,6 +284,8 @@ void do_proc(struct vegas_databuf *db_in,
                             payload_addr_in,
                             g_iBlockInDataSize,
                             cudaMemcpyHostToDevice));
+    g_pc4DataRead_d = g_pc4Data_d;
+
     struct time_spead_heap* time_heap = (struct time_spead_heap*) vegas_databuf_data(db_in, curblock_in);
     for (i = 0; i < index_in->num_heaps; ++i)
     {
@@ -292,7 +294,6 @@ void do_proc(struct vegas_databuf *db_in,
         ++time_heap;
     }
 
-    g_pc4DataRead_d = g_pc4Data_d;
     while (!is_proc_done)
     {
         g_iAccID = 0;
