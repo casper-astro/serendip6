@@ -1,0 +1,171 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+AM	random.c	134;"	d	file:
+AM	random.c	28;"	d	file:
+AM	random.c	36;"	d	file:
+AM	random.c	74;"	d	file:
+AM	random.c	85;"	d	file:
+AM	random.c	8;"	d	file:
+COS_PI_8	myfft.h	1;"	d
+Complex	complexOp.cu	/^typedef cufftComplex Complex;$/;"	t	file:
+ComplexAdd	complexOp.cu	/^__device__ inline Complex ComplexAdd(Complex a, Complex b){$/;"	f
+ComplexMul	complexOp.cu	/^__device__ inline Complex ComplexMul(Complex a, Complex b)$/;"	f
+ComplexScale	complexOp.cu	/^__device__ inline Complex ComplexScale(Complex a, float s)$/;"	f
+ComplexSub	complexOp.cu	/^__device__ inline Complex ComplexSub(Complex a, Complex b){$/;"	f
+DEF_CUFFT_FUNC	cufftFunc.cu	1;"	d	file:
+EPS	random.c	144;"	d	file:
+EPS	random.c	41;"	d	file:
+EPS	random.c	79;"	d	file:
+EPS	random.c	95;"	d	file:
+FFT16	fft16.cu	/^inline __device__ void FFT16(Complex *a){$/;"	f
+FFT16_THREAD	myfft.h	24;"	d
+FFT16_device	fft16.cu	/^__global__ void FFT16_device(Complex *data, int batch){$/;"	f
+FFT16_twiddle_device	fft16.cu	/^__global__ void FFT16_twiddle_device(Complex *data, int batch){$/;"	f
+FFT2	fft2.cu	/^inline __device__ void FFT2(Complex *a0, Complex *a1){$/;"	f
+FFT4	fft4.cu	/^inline __device__ void FFT4(Complex *a0, Complex *a1, Complex *a2, Complex *a3){$/;"	f
+FILENAME_BUFSIZE	fft_gpu.cu	14;"	d	file:
+FILENAME_BUFSIZE	fft_gpu_threshold.cu	12;"	d	file:
+FOUR_STEP_TRANSPOSE_DIM	fourStepFFT.cu	1;"	d	file:
+IA	random.c	26;"	d	file:
+IA	random.c	34;"	d	file:
+IA	random.c	6;"	d	file:
+IA	random.c	72;"	d	file:
+IA1	random.c	136;"	d	file:
+IA1	random.c	87;"	d	file:
+IA2	random.c	137;"	d	file:
+IA2	random.c	88;"	d	file:
+IM	random.c	27;"	d	file:
+IM	random.c	35;"	d	file:
+IM	random.c	73;"	d	file:
+IM	random.c	7;"	d	file:
+IM1	random.c	132;"	d	file:
+IM1	random.c	83;"	d	file:
+IM2	random.c	133;"	d	file:
+IM2	random.c	84;"	d	file:
+IMM1	random.c	135;"	d	file:
+IMM1	random.c	86;"	d	file:
+IQ	random.c	29;"	d	file:
+IQ	random.c	37;"	d	file:
+IQ	random.c	75;"	d	file:
+IQ	random.c	9;"	d	file:
+IQ1	random.c	138;"	d	file:
+IQ1	random.c	89;"	d	file:
+IQ2	random.c	139;"	d	file:
+IQ2	random.c	90;"	d	file:
+IR	random.c	10;"	d	file:
+IR	random.c	30;"	d	file:
+IR	random.c	38;"	d	file:
+IR	random.c	76;"	d	file:
+IR1	random.c	140;"	d	file:
+IR1	random.c	91;"	d	file:
+IR2	random.c	141;"	d	file:
+IR2	random.c	92;"	d	file:
+LOOP_NUM	fft_gpu_threshold.cu	17;"	d	file:
+MASK	random.c	11;"	d	file:
+MASK	random.c	31;"	d	file:
+MAX_GRID	fft_gpu.cu	18;"	d	file:
+MAX_GRID	fft_gpu_threshold.cu	16;"	d	file:
+MAX_THREAD	fft_gpu.cu	17;"	d	file:
+MAX_THREAD	fft_gpu_threshold.cu	15;"	d	file:
+MYFFT_E_1_2	myfft.h	12;"	d
+MYFFT_E_1_4	myfft.h	11;"	d
+MYFFT_E_1_8	myfft.h	15;"	d
+MYFFT_E_3_4	myfft.h	13;"	d
+MYFFT_E_3_8	myfft.h	16;"	d
+MYFFT_E_5_8	myfft.h	17;"	d
+MYFFT_E_7_8	myfft.h	18;"	d
+MYFFT_E_9_8	myfft.h	19;"	d
+MYFFT_MAX_GRID	myfft.h	29;"	d
+MYFFT_PI	myfft.h	5;"	d
+MYFFT_PI_2	myfft.h	6;"	d
+MYFFT_PI_4	myfft.h	7;"	d
+MYFFT_SQRT1_2	myfft.h	9;"	d
+MYFFT_SQRT2	myfft.h	8;"	d
+NDIV	random.c	143;"	d	file:
+NDIV	random.c	40;"	d	file:
+NDIV	random.c	78;"	d	file:
+NDIV	random.c	94;"	d	file:
+NTAB	random.c	142;"	d	file:
+NTAB	random.c	39;"	d	file:
+NTAB	random.c	77;"	d	file:
+NTAB	random.c	93;"	d	file:
+RNMX	random.c	145;"	d	file:
+RNMX	random.c	42;"	d	file:
+RNMX	random.c	80;"	d	file:
+RNMX	random.c	96;"	d	file:
+SIN_PI_8	myfft.h	2;"	d
+SUB_MAX_THREAD	fft_gpu.cu	16;"	d	file:
+SUB_MAX_THREAD	fft_gpu_threshold.cu	14;"	d	file:
+SUM_MAX_THREAD	fft_gpu.cu	15;"	d	file:
+SUM_MAX_THREAD	fft_gpu_threshold.cu	13;"	d	file:
+boxcar	fft_gpu.cu	/^int  boxcar = 8192;$/;"	v
+calcOverThreshold	calcThreshold_kernel.cu	/^__global__ void calcOverThreshold(float *inData, outputStruct *outData, int threshold, int outArrayWidth, int thread, int area){$/;"	f
+calc_avg_signal_data	convertToFloat_kernel.cu	/^__global__ void calc_avg_signal_data(float *partialSum, float *avg, int thread, int size){$/;"	f
+calc_grid	myfft.cu	/^dim3 calc_grid(int size){$/;"	f
+calc_over_threshold_exec	kernelExec.cu	/^void calc_over_threshold_exec(float *devPowerData, outputStruct *devOutputData, int signalLength, int boxcar, int threshold, int maximumDetectPointInBoxcar){$/;"	f
+calc_partialsum_signal_data	convertToFloat_kernel.cu	/^__global__ void calc_partialsum_signal_data(char *indata, float *partialSumRe, float *partialSumIm, int thread, int area){$/;"	f
+calc_subtract_signal_data	convertToFloat_kernel.cu	/^__global__ void calc_subtract_signal_data(char *indata, cufftComplex *data, float *avgRe, float *avgIm, int thread, int area){$/;"	f
+callFFT	fft_gpu.cu	/^float * callFFT(char *hostSignalData)$/;"	f
+check_cufft_exec_error	cufftFunc.cu	/^void check_cufft_exec_error(cufftResult result){$/;"	f
+check_cufft_plan_error	cufftFunc.cu	/^void check_cufft_plan_error(cufftResult result){$/;"	f
+convert_to_float_exec	kernelExec.cu	/^void convert_to_float_exec(char *devSignalData, float *devPartSumRe, float *devPartSumIm, float *devAvgRe, float *devAvgIm, cufftComplex *devFFTData, int signalLength){$/;"	f
+destroyFFT	fft_gpu.cu	/^void destroyFFT()$/;"	f
+devAvgIm	fft_gpu.cu	/^static float        *devAvgIm      = NULL;$/;"	v	file:
+devAvgRe	fft_gpu.cu	/^static float        *devAvgRe      = NULL;$/;"	v	file:
+devFFTData	fft_gpu.cu	/^static cufftComplex *devFFTData    = NULL;$/;"	v	file:
+devFFTDataMemSize	fft_gpu.cu	/^static unsigned int devFFTDataMemSize    = 0;$/;"	v	file:
+devOutputData	fft_gpu.cu	/^static outputStruct *devOutputData = NULL;$/;"	v	file:
+devOutputDataMemSize	fft_gpu.cu	/^static unsigned int devOutputDataMemSize = 0;$/;"	v	file:
+devPartSumIm	fft_gpu.cu	/^static float        *devPartSumIm  = NULL;$/;"	v	file:
+devPartSumRe	fft_gpu.cu	/^static float        *devPartSumRe  = NULL;$/;"	v	file:
+devPowerData	fft_gpu.cu	/^static float        *devPowerData  = NULL;$/;"	v	file:
+devPowerDataMemSize	fft_gpu.cu	/^static unsigned int devPowerDataMemSize  = 0;$/;"	v	file:
+devSignalData	fft_gpu.cu	/^static char         *devSignalData = NULL;$/;"	v	file:
+devSignalDataMemSize	fft_gpu.cu	/^static unsigned int devSignalDataMemSize = 0;$/;"	v	file:
+do_analyze_on_gpu	fft_gpu_threshold.cu	/^int do_analyze_on_gpu(int signalLength)  {$/;"	f
+do_four_step_fft	fourStepFFT.cu	/^void do_four_step_fft(cufftComplex *devFFTData, float *devPowerData, int matrixX, int matrixY){$/;"	f
+do_myfft	myfft.cu	/^void do_myfft(Complex *data, int batch, int mode){$/;"	f
+exec_cufft	cufftFunc.cu	/^void exec_cufft(cufftComplex *devData, int fftLen, int fftNum){$/;"	f
+exec_part_cufft	cufftFunc.cu	/^void exec_part_cufft(cufftComplex *devData, int fftLen, int fftNum){$/;"	f
+flat	random.c	/^float flat(float min, float max, long *seed) \/*includefile*\/$/;"	f
+gasdev	random.c	/^float gasdev(long *idum) \/*includefile*\/$/;"	f
+gauss	random.c	/^float gauss(long *seed, float mean, float sigma) \/*includefile*\/$/;"	f
+hostOutputData	fft_gpu.cu	/^outputStruct *hostOutputData = NULL;$/;"	v
+hostOutputDataMemSize	fft_gpu.cu	/^unsigned int hostOutputDataMemSize = 0;$/;"	v
+hostPowerData	fft_gpu.cu	/^float        *hostPowerData = NULL;$/;"	v
+hostPowerDataMemSize	fft_gpu.cu	/^unsigned int hostPowerDataMemSize = 0;$/;"	v
+hostcuFFTRData	fft_gpu.cu	/^float        *hostcuFFTRData = NULL;$/;"	v
+index	fft_gpu.h	/^        int           index;$/;"	m	struct:__anon1
+init_output_file	output.c	/^int init_output_file(){$/;"	f
+initializeFFT	fft_gpu.cu	/^void initializeFFT(int initializedSignalLength)$/;"	f
+main	bench_fft.cu	/^int main(int argc, char** argv){$/;"	f
+matrixX	fft_gpu.cu	/^int matrixX, matrixY;$/;"	v
+matrixY	fft_gpu.cu	/^int matrixX, matrixY;$/;"	v
+maximumDetectPointInBoxcar	fft_gpu.cu	/^int maximumDetectPointInBoxcar = 16;$/;"	v
+mean	fft_gpu.h	/^        float         mean;$/;"	m	struct:__anon1
+nrran0	random.c	/^float nrran0(long *idum) \/*includefile*\/$/;"	f
+nrran1	random.c	/^float nrran1(long *idum) \/*includefile*\/$/;"	f
+nrran2	random.c	/^float nrran2(long *idum) \/*includefile*\/$/;"	f
+outputCounter	fft_gpu.cu	/^int   outputCounter = 0;$/;"	v
+outputFclosePeriod	fft_gpu.cu	/^int   outputFclosePeriod = 10;$/;"	v
+outputFileName	fft_gpu.cu	/^char outputFileName[FILENAME_BUFSIZE] = "report.txt";$/;"	v
+outputFilePointer	fft_gpu.cu	/^FILE *outputFilePointer = NULL;$/;"	v
+outputStruct	fft_gpu.h	/^} outputStruct; $/;"	t	typeref:struct:__anon1
+output_cufft_exec_error	cufftFunc.cu	/^void output_cufft_exec_error(char *str){$/;"	f
+output_cufft_plan_error	cufftFunc.cu	/^void output_cufft_plan_error(char *str){$/;"	f
+output_spectrum	output.c	/^int output_spectrum(outputStruct *data, int iter, int flag){$/;"	f
+output_spectrum_to_file	output.c	/^void output_spectrum_to_file(outputStruct *data){$/;"	f
+output_spectrum_to_file	output_greg.c	/^void output_spectrum_to_file(FILE *outputFilePointer, int signalLength, char *hostSignalData, float *hostPowerData, float *hostcuFFTRData){$/;"	f
+output_spectrum_to_file_float	output_greg.c	/^void output_spectrum_to_file_float(FILE *outputFilePointer, int signalLength, cufftComplex* hostcuFFTData, float *hostPowerData){$/;"	f
+output_spectrum_to_file_float_threshold	output_greg.c	/^void output_spectrum_to_file_float_threshold(FILE *outputFilePointer, int signalLength, cufftComplex* hostFFTData, float *hostPowerData, outputStruct *data, int boxcar, int maximumDetectPointInBoxcar){$/;"	f
+power	fft_gpu.h	/^        float         power;$/;"	m	struct:__anon1
+power_transpose_four_step	fourStepFFT_kernel.cu	/^__global__ void power_transpose_four_step(cufftComplex *idata, float *odata, int width, int height){$/;"	f
+power_transpose_four_step_exec	fourStepFFT.cu	/^void power_transpose_four_step_exec(cufftComplex *FFTData, float *powerData, int x, int y){$/;"	f
+signalLength	fft_gpu.cu	/^int signalLength;$/;"	v
+terminate_output_file	output.c	/^void terminate_output_file(){$/;"	f
+terminate_output_file	output_greg.c	/^void terminate_output_file(FILE *outputFilePointer){$/;"	f
+threshold	fft_gpu.cu	/^int  threshold = 20;$/;"	v

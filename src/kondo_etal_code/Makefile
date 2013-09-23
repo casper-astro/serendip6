@@ -1,0 +1,31 @@
+NVIDIA_SDK_DIR = /home/jayanth/NVIDIA_GPU_Computing_SDK
+CUTIL_LIB_NAME = libcutil_x86_64.a
+NVCCFLAGS = -g -O2 -I$(NVIDIA_SDK_DIR)/C/common/inc $(NVIDIA_SDK_DIR)/C/lib/$(CUTIL_LIB_NAME) -lcufft -lm 
+TARGETS = bench_fft bench_fft_th
+LIB_TARGETS = libgpufft.a
+
+#default: bench_fft libgpufft.a
+default: bench_fft_th
+
+libgpufft.a : fft_gpu.cu Makefile output.c
+	nvcc $(NVCCFLAGS) fft_gpu.cu -c fft_gpu.o
+	ar rcs libgpufft.a fft_gpu.o
+
+bench_fft : bench_fft.cu fft_gpu.cu output.c Makefile
+	cc -c random.c
+	nvcc $(NVCCFLAGS) -c fft_gpu.cu
+	nvcc $(NVCCFLAGS) -o bench_fft fft_gpu.o random.o bench_fft.cu
+
+
+bench_fft_th : bench_fft.cu fft_gpu_threshold.cu Makefile
+	cc -c random.c
+	nvcc $(NVCCFLAGS) -c fft_gpu_threshold.cu
+	nvcc $(NVCCFLAGS) -o bench_fft_th fft_gpu_threshold.o random.o bench_fft.cu
+
+clean: 
+	@rm -vf *.o
+	
+realclean: clean
+	@rm -vf $(LIB_TARGETS)
+	@rm -vf $(TARGETS)
+
